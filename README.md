@@ -1,14 +1,16 @@
 <p align="center">
-  <img src="web/figures/logo.png" alt="PriceBench" width="160">
+  <img src="web/figures/logo.png" alt="PriceBench" width="200">
 </p>
 
-# PriceBench
+<h1 align="center">PriceBench</h1>
+
+<p align="center">
+  <a href="https://pashasan.github.io/PriceBench/"><strong>Read the full writeup &rarr;</strong></a>
+</p>
 
 A behavioral benchmark of 29 language models on 3,600 realistic NYC hotel booking tasks. Uses conditional logit to recover each model's willingness to trade dollars for stars, reviews, brand, and everything else the user did not specify.
 
 ![Personality map](web/figures/fig_personality.png)
-
-**Full writeup:** [`web/index.html`](web/index.html) — methodology, all figures, an 11-section replication appendix, and references.
 
 ## Highlights
 

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="web/figures/logo.png" alt="PriceBench" width="160">
+</p>
+
 # PriceBench
 
 A behavioral benchmark of 29 language models on 3,600 realistic NYC hotel booking tasks. Uses conditional logit to recover each model's willingness to trade dollars for stars, reviews, brand, and everything else the user did not specify.

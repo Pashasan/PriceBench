@@ -34,6 +34,7 @@ Thumbs.db
 !web/data/
 !web/figures/
 !web/figures/*.png
+!web/favicon.png
 !web/data/*.csv
 !web/data/*.json
 

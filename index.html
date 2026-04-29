@@ -16,9 +16,9 @@
 
 <header class="lede">
   <div class="eyebrow">PriceBench · a behavioral benchmark for LLM booking agents</div>
-  <h1>How much will an LLM pay for a better hotel?</h1>
+  <h1>Every LLM has a personality. Here's how 29 of them shop.</h1>
   <p class="source-link"><a href="https://github.com/Pashasan/PriceBench">Source code on GitHub &rarr;</a></p>
-  <p class="dek">A benchmark of 29 language models on 3,600 realistic New York hotel booking tasks. We use conditional logit to recover each model's willingness to trade dollars for stars, reviews, brand, and everything else the user did not specify.</p>
+  <p class="dek">When companies deploy LLMs to make user-facing decisions, each model's hidden preferences become the agent's personality. We benchmark 29 language models on 3,600 realistic New York hotel choices to recover what each one is actually optimizing for &mdash; price, quality, brand, and everything else the user did not specify.</p>
 </header>
 
 <!-- TL;DR -->
@@ -39,15 +39,38 @@
 
 <p>Users give shopping agents guardrails: a budget cap, a minimum star rating, a preferred neighborhood. Once those guardrails are set, the agent still has to pick between whichever options survive, and a real booking page usually leaves five or ten hotels tied on the explicit criteria. What tips the agent one way or the other is its implicit taste for price, quality, and a dozen things the user never specified. The same query, handed to different LLMs, therefore produces systematically different bookings.</p>
 
-<p>Here is one concrete example from our task set, a realistic decision with no "right" answer:</p>
+<p>Here is one concrete example from our task set &mdash; exactly what each model is shown (Task 113):</p>
 
-<div class="callout">
-<strong>Task 113.</strong> Two hotels passing a plausible guardrail.<br>
-<span class="mono">Option A</span>&nbsp;&nbsp;voco Times Square South &middot; 3&starf; &middot; review 8.0 &middot; $148<br>
-<span class="mono">Option B</span>&nbsp;&nbsp;Kimpton Theta New York &middot; 4&starf; &middot; review 8.2 &middot; $281<br>
-<br>
-GPT-5.4, GPT-5.4 Mini, GPT-4.1 Mini, Claude Haiku 4.5, and Gemma3 27B all take <span class="mono">A</span> (the cheaper 3&starf;) in both orderings. Gemma3 4B, DeepSeek-R1 7B, and Phi-4 Mini all take <span class="mono">B</span> (the pricier 4&starf;). None is wrong. They are different agents with different revealed preferences.
+<div class="choice-cards">
+  <div class="choice-card">
+    <div class="card-head"><span class="card-tag">Option A</span><strong>voco Times Square South</strong></div>
+    <dl class="card-attrs">
+      <dt>Star rating</dt><dd>3 stars</dd>
+      <dt>Neighborhood</dt><dd>Hell's Kitchen</dd>
+      <dt>Guest reviews</dt><dd>8.0/10 (1,406 reviews)</dd>
+      <dt>Room type</dt><dd>Standard King (1 king bed)</dd>
+      <dt>Free cancellation</dt><dd>Yes</dd>
+      <dt>Breakfast included</dt><dd>No</dd>
+      <dt>Key amenities</dt><dd>Free WiFi; Restaurant; Fitness center</dd>
+      <dt class="price-row">Price per night</dt><dd class="price-row">$148</dd>
+    </dl>
+  </div>
+  <div class="choice-card">
+    <div class="card-head"><span class="card-tag">Option B</span><strong>Kimpton Theta New York</strong></div>
+    <dl class="card-attrs">
+      <dt>Star rating</dt><dd>4 stars</dd>
+      <dt>Neighborhood</dt><dd>Times Square</dd>
+      <dt>Guest reviews</dt><dd>8.2/10 (697 reviews)</dd>
+      <dt>Room type</dt><dd>Standard King (1 king bed)</dd>
+      <dt>Free cancellation</dt><dd>Yes</dd>
+      <dt>Breakfast included</dt><dd>No</dd>
+      <dt>Key amenities</dt><dd>Free WiFi; Wine hour; Fitness center</dd>
+      <dt class="price-row">Price per night</dt><dd class="price-row">$281</dd>
+    </dl>
+  </div>
 </div>
+
+<p class="card-caption">The model is asked: <em>which option do you choose?</em> <strong>GPT-5.4, GPT-5.4 Mini, GPT-4.1 Mini, Claude Haiku 4.5, and Gemma3 27B</strong> all take A (the cheaper 3&starf;) in both orderings. <strong>Gemma3 4B, DeepSeek-R1 7B, and Phi-4 Mini</strong> all take B (the pricier 4&starf;). None is wrong. They are different agents with different revealed preferences.</p>
 
 <p>PriceBench quantifies those preferences along three axes. <strong>Position engagement</strong> asks whether the model reads the content at all. <strong>Price response</strong> asks how strongly it weights dollars. <strong>Quality and brand</strong> ask what it pays for, and which names it likes. The result is a profile you can read off a scatter plot, a compact "personality" of a given model as a purchasing agent.</p>
 

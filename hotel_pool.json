@@ -1,0 +1,3856 @@
+{
+  "description": "Pool of 179 realistic NYC hotel profiles for conjoint task generation. Each hotel has fixed attributes (name, stars, neighborhood, amenities) and variable attributes with realistic ranges (price, room type, cancellation, breakfast, review score/count). Variable attributes are randomized per task appearance within the specified ranges to reflect real-world variation.",
+  "price_variation_notes": "Hotel prices vary 30-50% around their base rate depending on season, day of week, demand, and advance booking (see revenue management literature). We model this as uniform draws within [price_min, price_max] for each task appearance. Ranges are calibrated to NYC April 2026 market data from Booking.com, Expedia, KAYAK, and TripAdvisor.",
+  "variable_attributes": {
+    "price_per_night": "Drawn uniformly from [price_min, price_max] for each appearance",
+    "room_type": "Randomly selected from the hotel's room_types list",
+    "cancellation_free": "Bernoulli draw; probability = cancellation_free_prob (non-refundable rates are typically 10-20% cheaper)",
+    "breakfast_included": "Bernoulli draw; probability = breakfast_prob",
+    "review_score": "Base Â± 0.2 (small drift over time)",
+    "review_count": "Base Â± 10% (grows over time)"
+  },
+  "hotels": [
+    {
+      "id": 1,
+      "name": "Pod 51",
+      "stars": 2,
+      "neighborhood": "Midtown East",
+      "review_score_base": 7.8,
+      "review_count_base": 5200,
+      "price_min": 65,
+      "price_max": 125,
+      "room_types": [
+        "Full Pod (1 twin bed)",
+        "Queen Pod (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Air conditioning"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Pod 39",
+      "stars": 3,
+      "neighborhood": "Murray Hill",
+      "review_score_base": 8.0,
+      "review_count_base": 2900,
+      "price_min": 75,
+      "price_max": 145,
+      "room_types": [
+        "Queen Pod (1 queen bed)",
+        "Full Bunk Pod (1 bunk bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Now Now NoHo",
+      "stars": 2,
+      "neighborhood": "NoHo",
+      "review_score_base": 7.5,
+      "review_count_base": 800,
+      "price_min": 90,
+      "price_max": 170,
+      "room_types": [
+        "Pod Room (1 single bed)",
+        "Double Pod (1 double bed)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Shared lounge"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Radio Hotel",
+      "stars": 2,
+      "neighborhood": "Washington Heights",
+      "review_score_base": 8.1,
+      "review_count_base": 1200,
+      "price_min": 70,
+      "price_max": 135,
+      "room_types": [
+        "Standard Queen (1 queen bed)",
+        "Standard King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Carlton Arms Hotel",
+      "stars": 2,
+      "neighborhood": "Gramercy",
+      "review_score_base": 7.2,
+      "review_count_base": 950,
+      "price_min": 85,
+      "price_max": 165,
+      "room_types": [
+        "Art Room (1 double bed)",
+        "Standard Room (1 twin bed)"
+      ],
+      "cancellation_free_prob": 0.2,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Hotel Wolcott",
+      "stars": 2,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.6,
+      "review_count_base": 1568,
+      "price_min": 70,
+      "price_max": 140,
+      "room_types": [
+        "Standard Queen (1 queen bed)",
+        "Standard Double (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "voco Times Square South",
+      "stars": 3,
+      "neighborhood": "Hell's Kitchen",
+      "review_score_base": 7.9,
+      "review_count_base": 1400,
+      "price_min": 85,
+      "price_max": 175,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Standard Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "YOTEL New York Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.5,
+      "review_count_base": 6885,
+      "price_min": 105,
+      "price_max": 210,
+      "room_types": [
+        "Premium Queen Cabin (1 queen bed)",
+        "First Cabin (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Terrace"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "MOXY NYC Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.9,
+      "review_count_base": 4500,
+      "price_min": 120,
+      "price_max": 240,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Bar"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Moxy NYC Downtown",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.1,
+      "review_count_base": 1600,
+      "price_min": 100,
+      "price_max": 200,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Moxy NYC Lower East Side",
+      "stars": 3,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.2,
+      "review_count_base": 1200,
+      "price_min": 130,
+      "price_max": 280,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Moxy NYC East Village",
+      "stars": 3,
+      "neighborhood": "East Village",
+      "review_score_base": 8.0,
+      "review_count_base": 1100,
+      "price_min": 120,
+      "price_max": 250,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Aloft New York Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.4,
+      "review_count_base": 1800,
+      "price_min": 130,
+      "price_max": 250,
+      "room_types": [
+        "Savvy Queen Room (1 queen bed)",
+        "Savvy King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Bar"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Margaritaville Resort Times Square",
+      "stars": 3,
+      "neighborhood": "Midtown West",
+      "review_score_base": 7.7,
+      "review_count_base": 2200,
+      "price_min": 85,
+      "price_max": 195,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Standard Double (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Pool",
+        "Bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Millennium Broadway Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.4,
+      "review_count_base": 3800,
+      "price_min": 85,
+      "price_max": 185,
+      "room_types": [
+        "Standard Queen (1 queen bed)",
+        "Superior King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Broadway Plaza Hotel",
+      "stars": 3,
+      "neighborhood": "Upper West Side",
+      "review_score_base": 9.2,
+      "review_count_base": 1933,
+      "price_min": 85,
+      "price_max": 180,
+      "room_types": [
+        "Studio (1 queen bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Kitchenette"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "The Hotel at Fifth Avenue",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.0,
+      "review_count_base": 1800,
+      "price_min": 100,
+      "price_max": 210,
+      "room_types": [
+        "Standard Queen (1 queen bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "The Lucerne Hotel",
+      "stars": 3,
+      "neighborhood": "Upper West Side",
+      "review_score_base": 8.3,
+      "review_count_base": 2400,
+      "price_min": 110,
+      "price_max": 220,
+      "room_types": [
+        "Classic Queen (1 queen bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Romer Hell's Kitchen",
+      "stars": 3,
+      "neighborhood": "Hell's Kitchen",
+      "review_score_base": 8.1,
+      "review_count_base": 650,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "Studio King (1 king bed)",
+        "Studio Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "SpringHill Suites by Marriott Midtown Manhattan",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.1,
+      "review_count_base": 3200,
+      "price_min": 145,
+      "price_max": 290,
+      "room_types": [
+        "Suite (1 king bed)",
+        "Suite (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.5,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Courtyard by Marriott Times Square West",
+      "stars": 3,
+      "neighborhood": "Midtown West",
+      "review_score_base": 8.0,
+      "review_count_base": 2200,
+      "price_min": 150,
+      "price_max": 300,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Hampton Inn Manhattan Times Square Central",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.5,
+      "review_count_base": 3500,
+      "price_min": 160,
+      "price_max": 310,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Hilton Garden Inn New York/West 35th Street",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.2,
+      "review_count_base": 2800,
+      "price_min": 150,
+      "price_max": 290,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Holiday Inn Manhattan-Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 7.8,
+      "review_count_base": 2100,
+      "price_min": 130,
+      "price_max": 250,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Standard Double (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Hotel Indigo NYC Financial District",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.0,
+      "review_count_base": 2100,
+      "price_min": 120,
+      "price_max": 240,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Standard Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.4,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Hyatt House New York/Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.3,
+      "review_count_base": 1800,
+      "price_min": 155,
+      "price_max": 310,
+      "room_types": [
+        "King Studio (1 king bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.6,
+      "amenities": [
+        "Free WiFi",
+        "Kitchen",
+        "Fitness center",
+        "Breakfast"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "citizenM New York Bowery",
+      "stars": 4,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.7,
+      "review_count_base": 3100,
+      "price_min": 145,
+      "price_max": 310,
+      "room_types": [
+        "citizenM King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Rain shower",
+        "Rooftop bar",
+        "Smart TV"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "citizenM New York Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.7,
+      "review_count_base": 3200,
+      "price_min": 140,
+      "price_max": 340,
+      "room_types": [
+        "citizenM King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Soundproof rooms",
+        "Rain shower",
+        "Smart TV"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Park Central Hotel New York",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.6,
+      "review_count_base": 4100,
+      "price_min": 165,
+      "price_max": 350,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Superior Queen (1 queen bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Courtyard by Marriott Manhattan/Central Park",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.2,
+      "review_count_base": 2800,
+      "price_min": 180,
+      "price_max": 370,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "New Yorker by Lotte Hotels",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.0,
+      "review_count_base": 14650,
+      "price_min": 195,
+      "price_max": 400,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Deluxe King (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Executive Hotel Le Soleil New York",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.4,
+      "review_count_base": 1900,
+      "price_min": 185,
+      "price_max": 380,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Deluxe Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "MADE Hotel",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.8,
+      "review_count_base": 2000,
+      "price_min": 175,
+      "price_max": 370,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Allergy-free rooms"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Public Hotel",
+      "stars": 4,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.2,
+      "review_count_base": 2100,
+      "price_min": 160,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Bar"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "LUMA Hotel Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.5,
+      "review_count_base": 2400,
+      "price_min": 200,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Bryant Park Hotel",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.3,
+      "review_count_base": 1600,
+      "price_min": 220,
+      "price_max": 450,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Deluxe Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 37,
+      "name": "NobleDEN Hotel",
+      "stars": 4,
+      "neighborhood": "Little Italy",
+      "review_score_base": 9.1,
+      "review_count_base": 980,
+      "price_min": 195,
+      "price_max": 400,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Deluxe Queen (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.5,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Casablanca Hotel by Library Hotel Collection",
+      "stars": 4,
+      "neighborhood": "Theater District",
+      "review_score_base": 9.2,
+      "review_count_base": 1500,
+      "price_min": 240,
+      "price_max": 480,
+      "room_types": [
+        "Classic Queen (1 queen bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Continental breakfast",
+        "24-hour refreshments"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Motto by Hilton New York City Chelsea",
+      "stars": 4,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.6,
+      "review_count_base": 1996,
+      "price_min": 160,
+      "price_max": 320,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Flex Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Hard Rock Hotel New York",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.4,
+      "review_count_base": 1703,
+      "price_min": 215,
+      "price_max": 430,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Bar"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "The Pearl Hotel New York",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.0,
+      "review_count_base": 2812,
+      "price_min": 180,
+      "price_max": 370,
+      "room_types": [
+        "Deluxe Queen (1 queen bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Complimentary breakfast",
+        "Wine hour"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Virgin Hotels New York City",
+      "stars": 4,
+      "neighborhood": "NoMad",
+      "review_score_base": 8.6,
+      "review_count_base": 950,
+      "price_min": 195,
+      "price_max": 400,
+      "room_types": [
+        "Chamber King (1 king bed)",
+        "Grand Chamber King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Arlo NoMad",
+      "stars": 4,
+      "neighborhood": "NoMad",
+      "review_score_base": 8.1,
+      "review_count_base": 2600,
+      "price_min": 145,
+      "price_max": 310,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "CIVILIAN Hotel",
+      "stars": 4,
+      "neighborhood": "Midtown West",
+      "review_score_base": 8.7,
+      "review_count_base": 1400,
+      "price_min": 170,
+      "price_max": 350,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Hotel Scherman",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.5,
+      "review_count_base": 620,
+      "price_min": 200,
+      "price_max": 410,
+      "room_types": [
+        "Deluxe Room (1 queen bed)",
+        "Premium King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.6,
+      "amenities": [
+        "Free WiFi",
+        "Continental breakfast",
+        "City views"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "New York Hilton Midtown",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.6,
+      "review_count_base": 12500,
+      "price_min": 190,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)",
+        "Executive King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Embassy Suites Manhattan Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.4,
+      "review_count_base": 3800,
+      "price_min": 235,
+      "price_max": 470,
+      "room_types": [
+        "King Suite (1 king bed)",
+        "Double Suite (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.9,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Evening reception",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Kimpton Theta New York",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.3,
+      "review_count_base": 750,
+      "price_min": 160,
+      "price_max": 330,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Wine hour",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "The Hotel Chelsea",
+      "stars": 4,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.6,
+      "review_count_base": 1200,
+      "price_min": 230,
+      "price_max": 480,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.4,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Concierge",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Ace Hotel Brooklyn",
+      "stars": 4,
+      "neighborhood": "Boerum Hill, Brooklyn",
+      "review_score_base": 8.4,
+      "review_count_base": 1100,
+      "price_min": 150,
+      "price_max": 310,
+      "room_types": [
+        "Standard King (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Lobby bar"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Nine Orchard",
+      "stars": 4,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.9,
+      "review_count_base": 750,
+      "price_min": 250,
+      "price_max": 520,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.5,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Spa"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Andaz 5th Avenue",
+      "stars": 4,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.8,
+      "review_count_base": 1600,
+      "price_min": 280,
+      "price_max": 560,
+      "room_types": [
+        "Andaz King (1 king bed)",
+        "Andaz Large King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Wine hour",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "The Ned NoMad",
+      "stars": 4,
+      "neighborhood": "NoMad",
+      "review_score_base": 8.5,
+      "review_count_base": 900,
+      "price_min": 300,
+      "price_max": 600,
+      "room_types": [
+        "Cosy Room (1 queen bed)",
+        "Medium Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop pool",
+        "Members club"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "The Wall Street Hotel",
+      "stars": 4,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.7,
+      "review_count_base": 650,
+      "price_min": 280,
+      "price_max": 560,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Pearl Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Ink 48 Hotel",
+      "stars": 5,
+      "neighborhood": "Hell's Kitchen",
+      "review_score_base": 8.0,
+      "review_count_base": 2523,
+      "price_min": 270,
+      "price_max": 540,
+      "room_types": [
+        "King Room (1 king bed)",
+        "King Room with City View (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Fitness center",
+        "City views"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "The Knickerbocker",
+      "stars": 5,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.8,
+      "review_count_base": 1800,
+      "price_min": 250,
+      "price_max": 520,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Premium King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Sofitel New York",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.6,
+      "review_count_base": 2400,
+      "price_min": 310,
+      "price_max": 620,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Luxury King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Spa",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 58,
+      "name": "The New York EDITION",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.8,
+      "review_count_base": 1400,
+      "price_min": 320,
+      "price_max": 650,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Superior King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Spa",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 59,
+      "name": "The Dominick Hotel",
+      "stars": 5,
+      "neighborhood": "SoHo",
+      "review_score_base": 8.9,
+      "review_count_base": 1800,
+      "price_min": 370,
+      "price_max": 750,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Deluxe King with City View (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.4,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Pool",
+        "Spa",
+        "City views"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Crosby Street Hotel",
+      "stars": 5,
+      "neighborhood": "SoHo",
+      "review_score_base": 9.4,
+      "review_count_base": 1100,
+      "price_min": 650,
+      "price_max": 1300,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Luxury King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Private theater",
+        "Gym",
+        "Terrace"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "The Whitby Hotel",
+      "stars": 5,
+      "neighborhood": "Upper Midtown",
+      "review_score_base": 9.3,
+      "review_count_base": 900,
+      "price_min": 540,
+      "price_max": 1100,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Superior King with Terrace (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Screening room",
+        "Gym"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Four Seasons Hotel New York Downtown",
+      "stars": 5,
+      "neighborhood": "TriBeCa",
+      "review_score_base": 9.0,
+      "review_count_base": 550,
+      "price_min": 490,
+      "price_max": 980,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Premier King with City View (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Spa",
+        "Pool",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "Baccarat Hotel and Residences New York",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.2,
+      "review_count_base": 680,
+      "price_min": 830,
+      "price_max": 1650,
+      "room_types": [
+        "Classic King (1 king bed)",
+        "Grand King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Spa",
+        "Pool",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "The Fifth Avenue Hotel",
+      "stars": 5,
+      "neighborhood": "NoMad",
+      "review_score_base": 9.1,
+      "review_count_base": 450,
+      "price_min": 520,
+      "price_max": 1050,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Grand King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Butler service",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "The William Vale",
+      "stars": 5,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.8,
+      "review_count_base": 2200,
+      "price_min": 280,
+      "price_max": 560,
+      "room_types": [
+        "Vale King (1 king bed)",
+        "Vale King with Balcony (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop pool",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "The Plaza",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.5,
+      "review_count_base": 3800,
+      "price_min": 750,
+      "price_max": 1500,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Superior King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Spa",
+        "Restaurant",
+        "Fitness center",
+        "Palm Court"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "Equinox Hotel New York",
+      "stars": 5,
+      "neighborhood": "Hudson Yards",
+      "review_score_base": 8.7,
+      "review_count_base": 850,
+      "price_min": 570,
+      "price_max": 1150,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Premium King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop pool",
+        "Spa",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Hampton Inn Manhattan-Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.2,
+      "review_count_base": 2800,
+      "price_min": 155,
+      "price_max": 310,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Hampton Inn Manhattan/Times Square South",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.3,
+      "review_count_base": 3200,
+      "price_min": 165,
+      "price_max": 330,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Hampton Inn Manhattan Grand Central",
+      "stars": 3,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.4,
+      "review_count_base": 2600,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Hampton Inn Manhattan-35th St/Empire State Bldg",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.2,
+      "review_count_base": 2400,
+      "price_min": 160,
+      "price_max": 320,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Hampton Inn Manhattan-Seaport/Financial District",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.1,
+      "review_count_base": 1800,
+      "price_min": 145,
+      "price_max": 290,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Hampton Inn Manhattan/Downtown-Financial District",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.0,
+      "review_count_base": 1600,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 74,
+      "name": "Hampton Inn Manhattan-SoHo",
+      "stars": 3,
+      "neighborhood": "SoHo",
+      "review_score_base": 8.3,
+      "review_count_base": 1400,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Hilton Garden Inn New York/Midtown Park Avenue",
+      "stars": 3,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.1,
+      "review_count_base": 2200,
+      "price_min": 160,
+      "price_max": 320,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 76,
+      "name": "Hilton Garden Inn New York/Manhattan-Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 7.9,
+      "review_count_base": 1800,
+      "price_min": 150,
+      "price_max": 300,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 77,
+      "name": "Hilton Garden Inn New York/Central Park South",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.3,
+      "review_count_base": 2000,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 78,
+      "name": "Hilton Garden Inn New York/Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.0,
+      "review_count_base": 2400,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Business center"
+      ]
+    },
+    {
+      "id": 79,
+      "name": "DoubleTree by Hilton New York Times Square West",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.8,
+      "review_count_base": 3200,
+      "price_min": 175,
+      "price_max": 350,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 80,
+      "name": "DoubleTree by Hilton New York Times Square South",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.7,
+      "review_count_base": 2800,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 81,
+      "name": "DoubleTree by Hilton NYC Financial District",
+      "stars": 4,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.0,
+      "review_count_base": 2100,
+      "price_min": 155,
+      "price_max": 310,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 82,
+      "name": "DoubleTree by Hilton New York Midtown Fifth Ave",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.9,
+      "review_count_base": 1900,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 83,
+      "name": "Holiday Inn New York City - Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.6,
+      "review_count_base": 3800,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Holiday Inn NYC - Lower East Side",
+      "stars": 3,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 7.8,
+      "review_count_base": 1600,
+      "price_min": 120,
+      "price_max": 240,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 85,
+      "name": "Holiday Inn New York City - Wall Street",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 7.7,
+      "review_count_base": 2000,
+      "price_min": 125,
+      "price_max": 250,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 86,
+      "name": "Holiday Inn Express Manhattan Midtown West",
+      "stars": 3,
+      "neighborhood": "Midtown West",
+      "review_score_base": 8.0,
+      "review_count_base": 2200,
+      "price_min": 135,
+      "price_max": 270,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 87,
+      "name": "Holiday Inn Express Manhattan Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.9,
+      "review_count_base": 2600,
+      "price_min": 145,
+      "price_max": 290,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.85,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 88,
+      "name": "Crowne Plaza HY36 Midtown Manhattan",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.5,
+      "review_count_base": 2200,
+      "price_min": 190,
+      "price_max": 380,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 89,
+      "name": "Crowne Plaza Times Square Manhattan",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.5,
+      "review_count_base": 4500,
+      "price_min": 175,
+      "price_max": 350,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 90,
+      "name": "InterContinental New York Times Square",
+      "stars": 5,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.4,
+      "review_count_base": 2800,
+      "price_min": 280,
+      "price_max": 560,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Premium King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 91,
+      "name": "InterContinental New York Barclay",
+      "stars": 5,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.7,
+      "review_count_base": 1600,
+      "price_min": 350,
+      "price_max": 700,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Premium King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 92,
+      "name": "Kimpton Hotel Eventi",
+      "stars": 4,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.6,
+      "review_count_base": 1800,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Wine hour"
+      ]
+    },
+    {
+      "id": 93,
+      "name": "Kimpton Muse Hotel",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.4,
+      "review_count_base": 1200,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Wine hour"
+      ]
+    },
+    {
+      "id": 94,
+      "name": "EVEN Hotel New York - Times Square South",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.5,
+      "review_count_base": 1400,
+      "price_min": 145,
+      "price_max": 290,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "In-room training zone"
+      ]
+    },
+    {
+      "id": 95,
+      "name": "Courtyard by Marriott New York Manhattan/Midtown East",
+      "stars": 3,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.0,
+      "review_count_base": 2000,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 96,
+      "name": "Courtyard by Marriott New York Manhattan/SoHo",
+      "stars": 3,
+      "neighborhood": "SoHo",
+      "review_score_base": 8.2,
+      "review_count_base": 1400,
+      "price_min": 185,
+      "price_max": 370,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 97,
+      "name": "Courtyard by Marriott New York Downtown Manhattan",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 7.9,
+      "review_count_base": 1800,
+      "price_min": 155,
+      "price_max": 310,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 98,
+      "name": "Courtyard by Marriott New York Manhattan/Upper East Side",
+      "stars": 3,
+      "neighborhood": "Upper East Side",
+      "review_score_base": 8.1,
+      "review_count_base": 1200,
+      "price_min": 175,
+      "price_max": 350,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 99,
+      "name": "Fairfield Inn & Suites New York Manhattan/Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.8,
+      "review_count_base": 2200,
+      "price_min": 150,
+      "price_max": 300,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 100,
+      "name": "Fairfield Inn & Suites New York Manhattan/Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 7.9,
+      "review_count_base": 1600,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 101,
+      "name": "Fairfield Inn & Suites New York Brooklyn",
+      "stars": 3,
+      "neighborhood": "Brooklyn",
+      "review_score_base": 7.7,
+      "review_count_base": 1200,
+      "price_min": 110,
+      "price_max": 220,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 102,
+      "name": "Fairfield Inn & Suites New York Manhattan/Downtown East",
+      "stars": 3,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.0,
+      "review_count_base": 900,
+      "price_min": 135,
+      "price_max": 270,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 103,
+      "name": "Residence Inn New York Manhattan/Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.2,
+      "review_count_base": 1800,
+      "price_min": 195,
+      "price_max": 390,
+      "room_types": [
+        "Studio Suite (1 king bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Kitchen",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 104,
+      "name": "Residence Inn New York Manhattan/Midtown East",
+      "stars": 3,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.1,
+      "review_count_base": 1400,
+      "price_min": 185,
+      "price_max": 370,
+      "room_types": [
+        "Studio Suite (1 king bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Kitchen",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 105,
+      "name": "Residence Inn New York Downtown Manhattan",
+      "stars": 3,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.0,
+      "review_count_base": 1100,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "Studio Suite (1 king bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.8,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast included",
+        "Kitchen",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 106,
+      "name": "AC Hotel New York Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.3,
+      "review_count_base": 2000,
+      "price_min": 190,
+      "price_max": 380,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 107,
+      "name": "AC Hotel New York Downtown",
+      "stars": 4,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.1,
+      "review_count_base": 1200,
+      "price_min": 170,
+      "price_max": 340,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 108,
+      "name": "W New York - Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.8,
+      "review_count_base": 2800,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "Wonderful King (1 king bed)",
+        "Spectacular King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 109,
+      "name": "W New York - Union Square",
+      "stars": 4,
+      "neighborhood": "Union Square",
+      "review_score_base": 8.2,
+      "review_count_base": 1600,
+      "price_min": 240,
+      "price_max": 480,
+      "room_types": [
+        "Wonderful King (1 king bed)",
+        "Spectacular King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 110,
+      "name": "The Westin New York Grand Central",
+      "stars": 4,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.0,
+      "review_count_base": 3200,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Heavenly Bed"
+      ]
+    },
+    {
+      "id": 111,
+      "name": "The Westin New York at Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.9,
+      "review_count_base": 4100,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Bar"
+      ]
+    },
+    {
+      "id": 112,
+      "name": "Sheraton New York Times Square Hotel",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.5,
+      "review_count_base": 5200,
+      "price_min": 195,
+      "price_max": 390,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 113,
+      "name": "Sheraton Tribeca New York Hotel",
+      "stars": 4,
+      "neighborhood": "TriBeCa",
+      "review_score_base": 8.0,
+      "review_count_base": 1600,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 114,
+      "name": "Sheraton Brooklyn New York Hotel",
+      "stars": 4,
+      "neighborhood": "Downtown Brooklyn",
+      "review_score_base": 7.8,
+      "review_count_base": 1400,
+      "price_min": 150,
+      "price_max": 300,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Fitness center",
+        "Pool"
+      ]
+    },
+    {
+      "id": 115,
+      "name": "Hyatt Grand Central New York",
+      "stars": 4,
+      "neighborhood": "Midtown East",
+      "review_score_base": 7.8,
+      "review_count_base": 3500,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 116,
+      "name": "Hyatt Centric Midtown 5th Avenue New York",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.4,
+      "review_count_base": 1800,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 117,
+      "name": "Hyatt Centric Times Square New York",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.3,
+      "review_count_base": 2200,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 118,
+      "name": "Hyatt Centric Wall Street New York",
+      "stars": 4,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.5,
+      "review_count_base": 1200,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 119,
+      "name": "Hyatt Place New York Midtown South",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.1,
+      "review_count_base": 1600,
+      "price_min": 150,
+      "price_max": 300,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.6,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 120,
+      "name": "Hyatt Place New York/Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.0,
+      "review_count_base": 1200,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.6,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 121,
+      "name": "Hyatt Regency Times Square",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.9,
+      "review_count_base": 2600,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 122,
+      "name": "Park Hyatt New York",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.1,
+      "review_count_base": 800,
+      "price_min": 650,
+      "price_max": 1300,
+      "room_types": [
+        "Park King (1 king bed)",
+        "Park Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa",
+        "Pool"
+      ]
+    },
+    {
+      "id": 123,
+      "name": "Thompson Central Park New York",
+      "stars": 4,
+      "neighborhood": "Midtown West",
+      "review_score_base": 8.0,
+      "review_count_base": 2400,
+      "price_min": 280,
+      "price_max": 560,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 124,
+      "name": "The Beekman, A Thompson Hotel",
+      "stars": 5,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.8,
+      "review_count_base": 1400,
+      "price_min": 320,
+      "price_max": 640,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Turret Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Fitness center",
+        "Historic atrium"
+      ]
+    },
+    {
+      "id": 125,
+      "name": "Wyndham New Yorker Hotel",
+      "stars": 3,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.4,
+      "review_count_base": 4200,
+      "price_min": 120,
+      "price_max": 240,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 126,
+      "name": "Ramada by Wyndham New York/Eastside",
+      "stars": 2,
+      "neighborhood": "Midtown East",
+      "review_score_base": 6.8,
+      "review_count_base": 1800,
+      "price_min": 80,
+      "price_max": 160,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi"
+      ]
+    },
+    {
+      "id": 127,
+      "name": "Days Inn by Wyndham NYC Midtown 45",
+      "stars": 2,
+      "neighborhood": "Midtown",
+      "review_score_base": 6.5,
+      "review_count_base": 2200,
+      "price_min": 75,
+      "price_max": 150,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi"
+      ]
+    },
+    {
+      "id": 128,
+      "name": "La Quinta Inn & Suites New York Times Square South",
+      "stars": 2,
+      "neighborhood": "Midtown",
+      "review_score_base": 7.2,
+      "review_count_base": 1600,
+      "price_min": 90,
+      "price_max": 180,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.5,
+      "amenities": [
+        "Free WiFi",
+        "Breakfast"
+      ]
+    },
+    {
+      "id": 129,
+      "name": "Best Western Plus Hospitality House Suites",
+      "stars": 3,
+      "neighborhood": "Midtown East",
+      "review_score_base": 7.8,
+      "review_count_base": 1400,
+      "price_min": 130,
+      "price_max": 260,
+      "room_types": [
+        "Studio Suite (1 queen bed)",
+        "One-Bedroom Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Kitchen",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 130,
+      "name": "The Jane Hotel",
+      "stars": 2,
+      "neighborhood": "West Village",
+      "review_score_base": 7.3,
+      "review_count_base": 2400,
+      "price_min": 80,
+      "price_max": 160,
+      "room_types": [
+        "Standard Cabin (1 twin bed)",
+        "Captain's Cabin (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Bar",
+        "Ballroom"
+      ]
+    },
+    {
+      "id": 131,
+      "name": "Freehand New York",
+      "stars": 3,
+      "neighborhood": "Flatiron",
+      "review_score_base": 8.0,
+      "review_count_base": 1800,
+      "price_min": 130,
+      "price_max": 260,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "King Room (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Rooftop"
+      ]
+    },
+    {
+      "id": 132,
+      "name": "The Local NYC",
+      "stars": 2,
+      "neighborhood": "Long Island City, Queens",
+      "review_score_base": 8.2,
+      "review_count_base": 900,
+      "price_min": 70,
+      "price_max": 140,
+      "room_types": [
+        "Queen Room (1 queen bed)",
+        "Bunk Room (2 bunk beds)"
+      ],
+      "cancellation_free_prob": 0.3,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Shared kitchen"
+      ]
+    },
+    {
+      "id": 133,
+      "name": "HI New York City Hostel",
+      "stars": 1,
+      "neighborhood": "Upper West Side",
+      "review_score_base": 7.0,
+      "review_count_base": 3200,
+      "price_min": 45,
+      "price_max": 90,
+      "room_types": [
+        "Dorm Bed (1 bunk bed)",
+        "Private Room (1 double bed)"
+      ],
+      "cancellation_free_prob": 0.2,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Shared kitchen",
+        "Lounge"
+      ]
+    },
+    {
+      "id": 134,
+      "name": "Pod Brooklyn",
+      "stars": 3,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.1,
+      "review_count_base": 800,
+      "price_min": 85,
+      "price_max": 170,
+      "room_types": [
+        "Queen Pod (1 queen bed)",
+        "King Pod (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.0,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar"
+      ]
+    },
+    {
+      "id": 135,
+      "name": "The Ludlow Hotel",
+      "stars": 4,
+      "neighborhood": "Lower East Side",
+      "review_score_base": 8.6,
+      "review_count_base": 1100,
+      "price_min": 230,
+      "price_max": 460,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Garden"
+      ]
+    },
+    {
+      "id": 136,
+      "name": "The Bowery Hotel",
+      "stars": 4,
+      "neighborhood": "East Village",
+      "review_score_base": 8.8,
+      "review_count_base": 850,
+      "price_min": 310,
+      "price_max": 620,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Fireplace lounge"
+      ]
+    },
+    {
+      "id": 137,
+      "name": "The Marlton Hotel",
+      "stars": 4,
+      "neighborhood": "Greenwich Village",
+      "review_score_base": 8.5,
+      "review_count_base": 950,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 138,
+      "name": "The Standard East Village",
+      "stars": 4,
+      "neighborhood": "East Village",
+      "review_score_base": 8.3,
+      "review_count_base": 1200,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 139,
+      "name": "The Standard High Line",
+      "stars": 4,
+      "neighborhood": "Meatpacking District",
+      "review_score_base": 8.5,
+      "review_count_base": 2000,
+      "price_min": 290,
+      "price_max": 580,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Beer garden"
+      ]
+    },
+    {
+      "id": 140,
+      "name": "NoMo SoHo",
+      "stars": 4,
+      "neighborhood": "SoHo",
+      "review_score_base": 8.2,
+      "review_count_base": 1100,
+      "price_min": 240,
+      "price_max": 480,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 141,
+      "name": "The Greenwich Hotel",
+      "stars": 5,
+      "neighborhood": "TriBeCa",
+      "review_score_base": 9.3,
+      "review_count_base": 500,
+      "price_min": 600,
+      "price_max": 1200,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Spa",
+        "Pool",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 142,
+      "name": "The Mercer",
+      "stars": 5,
+      "neighborhood": "SoHo",
+      "review_score_base": 9.0,
+      "review_count_base": 650,
+      "price_min": 550,
+      "price_max": 1100,
+      "room_types": [
+        "Mercer King (1 king bed)",
+        "Penthouse Loft (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 143,
+      "name": "1 Hotel Brooklyn Bridge",
+      "stars": 4,
+      "neighborhood": "Brooklyn Heights",
+      "review_score_base": 8.6,
+      "review_count_base": 1800,
+      "price_min": 310,
+      "price_max": 620,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop pool",
+        "Restaurant",
+        "Spa"
+      ]
+    },
+    {
+      "id": 144,
+      "name": "1 Hotel Central Park",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.7,
+      "review_count_base": 1200,
+      "price_min": 400,
+      "price_max": 800,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Spa",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 145,
+      "name": "The Langham New York Fifth Avenue",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.0,
+      "review_count_base": 700,
+      "price_min": 480,
+      "price_max": 960,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Premier King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 146,
+      "name": "Mandarin Oriental New York",
+      "stars": 5,
+      "neighborhood": "Upper West Side",
+      "review_score_base": 8.9,
+      "review_count_base": 1000,
+      "price_min": 700,
+      "price_max": 1400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Hudson River View King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa",
+        "Pool"
+      ]
+    },
+    {
+      "id": 147,
+      "name": "The Pierre, A Taj Hotel",
+      "stars": 5,
+      "neighborhood": "Upper East Side",
+      "review_score_base": 8.8,
+      "review_count_base": 1400,
+      "price_min": 420,
+      "price_max": 840,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 148,
+      "name": "The Carlyle, A Rosewood Hotel",
+      "stars": 5,
+      "neighborhood": "Upper East Side",
+      "review_score_base": 9.1,
+      "review_count_base": 600,
+      "price_min": 750,
+      "price_max": 1500,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Superior King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Spa",
+        "Restaurant",
+        "Live jazz",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 149,
+      "name": "Lotte New York Palace",
+      "stars": 5,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.4,
+      "review_count_base": 2200,
+      "price_min": 360,
+      "price_max": 720,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Palace King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 150,
+      "name": "The Peninsula New York",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.2,
+      "review_count_base": 900,
+      "price_min": 800,
+      "price_max": 1600,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa",
+        "Pool"
+      ]
+    },
+    {
+      "id": 151,
+      "name": "The St. Regis New York",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 9.0,
+      "review_count_base": 1100,
+      "price_min": 700,
+      "price_max": 1400,
+      "room_types": [
+        "Superior King (1 king bed)",
+        "Grand Deluxe King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Butler service",
+        "Restaurant",
+        "Bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 152,
+      "name": "Arlo Midtown",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.0,
+      "review_count_base": 1800,
+      "price_min": 130,
+      "price_max": 260,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 153,
+      "name": "The Renwick Hotel",
+      "stars": 4,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.3,
+      "review_count_base": 900,
+      "price_min": 190,
+      "price_max": 380,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 154,
+      "name": "Walker Hotel Greenwich Village",
+      "stars": 4,
+      "neighborhood": "Greenwich Village",
+      "review_score_base": 8.4,
+      "review_count_base": 700,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 155,
+      "name": "Walker Hotel Tribeca",
+      "stars": 4,
+      "neighborhood": "TriBeCa",
+      "review_score_base": 8.2,
+      "review_count_base": 500,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 156,
+      "name": "The Hoxton Williamsburg",
+      "stars": 4,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.5,
+      "review_count_base": 1000,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop bar"
+      ]
+    },
+    {
+      "id": 157,
+      "name": "Hotel Hugo",
+      "stars": 4,
+      "neighborhood": "SoHo",
+      "review_score_base": 8.1,
+      "review_count_base": 1200,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 158,
+      "name": "The James New York NoMad",
+      "stars": 4,
+      "neighborhood": "NoMad",
+      "review_score_base": 8.3,
+      "review_count_base": 800,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop bar",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 159,
+      "name": "Smyth Tribeca",
+      "stars": 4,
+      "neighborhood": "TriBeCa",
+      "review_score_base": 8.4,
+      "review_count_base": 700,
+      "price_min": 230,
+      "price_max": 460,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 160,
+      "name": "The Rockaway Hotel & Spa",
+      "stars": 4,
+      "neighborhood": "Rockaway Beach, Queens",
+      "review_score_base": 8.3,
+      "review_count_base": 500,
+      "price_min": 180,
+      "price_max": 360,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Pool",
+        "Spa",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 161,
+      "name": "Wythe Hotel",
+      "stars": 4,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.6,
+      "review_count_base": 1100,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Rooftop bar"
+      ]
+    },
+    {
+      "id": 162,
+      "name": "McCarren Hotel & Pool",
+      "stars": 4,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.0,
+      "review_count_base": 800,
+      "price_min": 160,
+      "price_max": 320,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Pool",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 163,
+      "name": "The Williamsburg Hotel",
+      "stars": 4,
+      "neighborhood": "Williamsburg, Brooklyn",
+      "review_score_base": 8.2,
+      "review_count_base": 900,
+      "price_min": 190,
+      "price_max": 380,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Pool",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 164,
+      "name": "Even Hotel Brooklyn",
+      "stars": 3,
+      "neighborhood": "Downtown Brooklyn",
+      "review_score_base": 8.3,
+      "review_count_base": 700,
+      "price_min": 120,
+      "price_max": 240,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center"
+      ]
+    },
+    {
+      "id": 165,
+      "name": "Hotel Le Bleu",
+      "stars": 3,
+      "neighborhood": "Park Slope, Brooklyn",
+      "review_score_base": 8.0,
+      "review_count_base": 500,
+      "price_min": 110,
+      "price_max": 220,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 166,
+      "name": "Z Hotel New York",
+      "stars": 3,
+      "neighborhood": "Long Island City, Queens",
+      "review_score_base": 7.9,
+      "review_count_base": 1400,
+      "price_min": 95,
+      "price_max": 190,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar"
+      ]
+    },
+    {
+      "id": 167,
+      "name": "Paper Factory Hotel",
+      "stars": 3,
+      "neighborhood": "Long Island City, Queens",
+      "review_score_base": 8.3,
+      "review_count_base": 600,
+      "price_min": 100,
+      "price_max": 200,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.4,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 168,
+      "name": "The Boro Hotel",
+      "stars": 4,
+      "neighborhood": "Long Island City, Queens",
+      "review_score_base": 8.5,
+      "review_count_base": 800,
+      "price_min": 130,
+      "price_max": 260,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Bar",
+        "Manhattan views"
+      ]
+    },
+    {
+      "id": 169,
+      "name": "Henry Norman Hotel",
+      "stars": 4,
+      "neighborhood": "Greenpoint, Brooklyn",
+      "review_score_base": 8.4,
+      "review_count_base": 500,
+      "price_min": 140,
+      "price_max": 280,
+      "room_types": [
+        "King Suite (1 king bed)",
+        "Loft Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.1,
+      "amenities": [
+        "Free WiFi",
+        "Garden"
+      ]
+    },
+    {
+      "id": 170,
+      "name": "Renaissance New York Midtown Hotel",
+      "stars": 4,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.1,
+      "review_count_base": 2200,
+      "price_min": 220,
+      "price_max": 440,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 171,
+      "name": "New York Marriott Marquis",
+      "stars": 4,
+      "neighborhood": "Times Square",
+      "review_score_base": 7.8,
+      "review_count_base": 8500,
+      "price_min": 250,
+      "price_max": 500,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Restaurant",
+        "Bar",
+        "Fitness center",
+        "Theater"
+      ]
+    },
+    {
+      "id": 172,
+      "name": "New York Marriott Downtown",
+      "stars": 4,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.0,
+      "review_count_base": 3200,
+      "price_min": 200,
+      "price_max": 400,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 173,
+      "name": "The Lexington Hotel, Autograph Collection",
+      "stars": 4,
+      "neighborhood": "Midtown East",
+      "review_score_base": 8.1,
+      "review_count_base": 2800,
+      "price_min": 210,
+      "price_max": 420,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar"
+      ]
+    },
+    {
+      "id": 174,
+      "name": "Moxy NYC Chelsea",
+      "stars": 3,
+      "neighborhood": "Chelsea",
+      "review_score_base": 8.1,
+      "review_count_base": 1400,
+      "price_min": 130,
+      "price_max": 260,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Queen Room (1 queen bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.05,
+      "amenities": [
+        "Free WiFi",
+        "Rooftop bar",
+        "Restaurant"
+      ]
+    },
+    {
+      "id": 175,
+      "name": "Conrad New York Midtown",
+      "stars": 5,
+      "neighborhood": "Midtown",
+      "review_score_base": 8.5,
+      "review_count_base": 1600,
+      "price_min": 320,
+      "price_max": 640,
+      "room_types": [
+        "King Suite (1 king bed)",
+        "Deluxe Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 176,
+      "name": "Conrad New York Downtown",
+      "stars": 5,
+      "neighborhood": "Financial District",
+      "review_score_base": 8.6,
+      "review_count_base": 2000,
+      "price_min": 290,
+      "price_max": 580,
+      "room_types": [
+        "King Suite (1 king bed)",
+        "Deluxe Suite (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.15,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 177,
+      "name": "Tempo by Hilton New York Times Square",
+      "stars": 3,
+      "neighborhood": "Times Square",
+      "review_score_base": 8.2,
+      "review_count_base": 600,
+      "price_min": 175,
+      "price_max": 350,
+      "room_types": [
+        "King Room (1 king bed)",
+        "Double Room (2 double beds)"
+      ],
+      "cancellation_free_prob": 0.6,
+      "breakfast_prob": 0.3,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Kitchen"
+      ]
+    },
+    {
+      "id": 178,
+      "name": "Loews Regency Hotel New York",
+      "stars": 5,
+      "neighborhood": "Upper East Side",
+      "review_score_base": 8.7,
+      "review_count_base": 1100,
+      "price_min": 380,
+      "price_max": 760,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Park Avenue King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa"
+      ]
+    },
+    {
+      "id": 179,
+      "name": "The Ritz-Carlton New York, NoMad",
+      "stars": 5,
+      "neighborhood": "NoMad",
+      "review_score_base": 9.0,
+      "review_count_base": 400,
+      "price_min": 800,
+      "price_max": 1600,
+      "room_types": [
+        "Deluxe King (1 king bed)",
+        "Premier King (1 king bed)"
+      ],
+      "cancellation_free_prob": 0.5,
+      "breakfast_prob": 0.2,
+      "amenities": [
+        "Free WiFi",
+        "Fitness center",
+        "Restaurant",
+        "Bar",
+        "Spa",
+        "Pool"
+      ]
+    }
+  ]
+}

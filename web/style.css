@@ -1,0 +1,304 @@
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #444;
+  --muted: #777;
+  --rule: #e6e6e6;
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --accent: #c4631d;
+  --accent-2: #2c5f8a;
+  --good: #0e7a4f;
+  --warn: #b54430;
+  --code-bg: #f4f1ec;
+  --max: 760px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Charter', 'Georgia', 'Cambria', serif;
+  font-size: 18px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  max-width: var(--max);
+  padding: 64px 28px 120px;
+  margin: 0 auto;
+}
+
+header.lede {
+  margin-bottom: 56px;
+}
+
+.eyebrow {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-family: 'Charter', 'Georgia', serif;
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.12;
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.25;
+  margin: 56px 0 14px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+h2 .num {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-right: 12px;
+  letter-spacing: 0.06em;
+}
+
+h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  margin: 28px 0 8px;
+  color: var(--ink);
+}
+
+p {
+  margin: 0 0 18px;
+  color: var(--ink);
+}
+
+p.dek {
+  font-size: 21px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 26px;
+  font-style: italic;
+}
+
+ul, ol { padding-left: 24px; margin: 0 0 18px; }
+li { margin-bottom: 6px; }
+
+a {
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(44, 95, 138, 0.3);
+}
+a:hover { border-bottom-color: var(--accent-2); }
+
+code, .mono {
+  font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 14.5px;
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+figure {
+  margin: 28px 0 36px;
+  /* allow figures to escape the prose column slightly */
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+figure img {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+figcaption {
+  margin-top: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  padding: 0 8px;
+}
+
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--bg-soft);
+  padding: 18px 22px;
+  margin: 26px 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 17px;
+}
+.callout strong { color: var(--ink); }
+
+.note {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 12px;
+  margin-top: 28px;
+}
+
+table.compact {
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 14px 0 28px;
+}
+table.compact th, table.compact td {
+  text-align: left;
+  padding: 7px 12px 7px 0;
+  border-bottom: 1px solid var(--rule);
+}
+table.compact th {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border-bottom: 1.5px solid var(--ink);
+}
+table.compact td.num, table.compact th.num { text-align: right; }
+table.compact .locked { color: var(--warn); }
+table.compact .engaged { color: var(--good); }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 56px 0;
+}
+
+footer {
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+/* ── References ──────────────────────────────────────────────────────────── */
+
+ol.references {
+  list-style: decimal;
+  padding-left: 28px;
+  margin: 14px 0 24px;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+ol.references li {
+  margin-bottom: 18px;
+  padding-left: 4px;
+}
+
+ol.references cite {
+  font-style: normal;
+  color: var(--ink);
+}
+
+ol.references .ref-note {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── Appendix ───────────────────────────────────────────────────────────── */
+
+hr.appendix-divider {
+  border: none;
+  border-top: 2px solid var(--ink);
+  margin: 80px 0 0;
+  position: relative;
+}
+
+.appendix {
+  margin-top: 48px;
+  font-size: 16.5px;
+  color: var(--ink-soft);
+}
+
+.appendix h2.appendix-title {
+  font-family: 'Charter', 'Georgia', serif;
+  font-weight: 700;
+  font-size: 30px;
+  margin: 6px 0 12px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+.appendix p.appendix-dek {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 18px;
+}
+
+.appendix h3 {
+  margin-top: 32px;
+}
+
+.appendix p, .appendix li {
+  color: var(--ink-soft);
+}
+
+.appendix strong { color: var(--ink); }
+
+pre.code-block {
+  font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+  background: var(--code-bg);
+  color: var(--ink);
+  padding: 14px 18px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 14px 0 22px;
+  white-space: pre;
+}
+
+.callout.prompt-block {
+  padding: 16px 20px;
+}
+.callout.prompt-block pre {
+  font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--ink);
+  background: transparent;
+}
+
+@media (max-width: 760px) {
+  main { padding: 36px 18px 80px; }
+  h1 { font-size: 34px; }
+  p.dek { font-size: 18px; }
+  figure { margin-left: -8px; margin-right: -8px; }
+  .appendix h2.appendix-title { font-size: 24px; }
+  pre.code-block { font-size: 12.5px; }
+}

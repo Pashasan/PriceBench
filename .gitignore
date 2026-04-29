@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Output files (generated)
+*.png
+*.csv
+*.txt
+
+# Allow committed figures and docs
+!figures/*.png
+!README.md
+!LICENSE
+!requirements.txt
+!conjoint_tasks.csv
+
+# Web writeup assets (PriceBench landing page)
+!web/
+!web/data/
+!web/figures/
+!web/figures/*.png
+!web/data/*.csv
+!web/data/*.json
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.pdf
+paper/*.synctex.gz
+
+# Claude Code
+.claude/

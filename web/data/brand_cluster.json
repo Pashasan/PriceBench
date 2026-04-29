@@ -1,0 +1,20 @@
+{
+  "n_engaged_models": 23,
+  "n_providers": 8,
+  "within_provider_mean_r": 0.07891817714420545,
+  "across_provider_mean_r": 0.09010728627298328,
+  "gap": -0.011189109128777838,
+  "permutation_p": 0.481,
+  "n_within_pairs": 34,
+  "n_across_pairs": 219,
+  "providers": [
+    "Alibaba",
+    "Anthropic",
+    "DeepSeek",
+    "Google",
+    "Meta",
+    "Microsoft",
+    "Mistral",
+    "OpenAI"
+  ]
+}

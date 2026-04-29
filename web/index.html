@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PriceBench: how much will an LLM pay for a better hotel?</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<main>
+
+<header class="lede">
+  <div class="eyebrow">PriceBench · a behavioral benchmark for LLM booking agents</div>
+  <h1>How much will an LLM pay for a better hotel?</h1>
+  <p class="dek">A benchmark of 29 language models on 3,600 realistic New York hotel booking tasks. We use conditional logit to recover each model's willingness to trade dollars for stars, reviews, brand, and everything else the user did not specify.</p>
+</header>
+
+<!-- TL;DR -->
+<div class="callout">
+<strong>TL;DR.</strong>
+<ul>
+  <li>We score 29 LLMs from 8 providers on 1,800 binary and 1,800 ternary hotel choices drawn from 179 real NYC properties, then fit conditional logit to recover price sensitivity, quality sensitivity, and residual brand preference per model.</li>
+  <li>Five small models are <em>position-locked</em> at temperature 0 (99%+ first-option rate) and express no preferences at all. They would book whatever appears first on the page.</li>
+  <li>Among the 23 engaged models, log-price sensitivity spans roughly 18x, from &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;7.02 (GPT-5.4) to &minus;0.40 (Qwen3 30B-A3B). Two models do not meaningfully respond to price at all (Gemma3 1B, Phi-2 2.7B).</li>
+  <li>The price-quality plane is <em>lopsided</em>: 10 models read both price and quality well, 10 read neither. Only two outliers (Gemma2 9B, Phi-4 Mini) break the diagonal. Model choice is mostly between "coherent purchaser" and "weak preferences," not between "bargain hunter" and "quality chaser."</li>
+  <li>A ternary robustness check reproduces the binary analysis closely in rank (Spearman &rho;&nbsp;=&nbsp;0.88 on log-price |&beta;|, &rho;&nbsp;=&nbsp;0.90 on linear-price |&beta;|; functional-form agreement 18 of 22).</li>
+  <li>After controlling for price, stars, reviews, cancellation, and breakfast, several capable models over-weight specific Wyndham-mapped properties (N&nbsp;=&nbsp;5 hotels, so treat as a narrow finding). Claude Haiku 4.5 is uniquely balanced across all five chain families. Same-provider models do <em>not</em> share brand preferences (permutation test p&nbsp;=&nbsp;0.48).</li>
+</ul>
+</div>
+
+<!-- SECTION 1 -->
+<h2><span class="num">&sect;1</span> Why measure LLM price sensitivity at all?</h2>
+
+<p>Users give shopping agents guardrails: a budget cap, a minimum star rating, a preferred neighborhood. Once those guardrails are set, the agent still has to pick between whichever options survive, and a real booking page usually leaves five or ten hotels tied on the explicit criteria. What tips the agent one way or the other is its implicit taste for price, quality, and a dozen things the user never specified. The same query, handed to different LLMs, therefore produces systematically different bookings.</p>
+
+<p>Here is one concrete example from our task set, a realistic decision with no "right" answer:</p>
+
+<div class="callout">
+<strong>Task 113.</strong> Two hotels passing a plausible guardrail.<br>
+<span class="mono">Option A</span>&nbsp;&nbsp;voco Times Square South &middot; 3&starf; &middot; review 8.0 &middot; $148<br>
+<span class="mono">Option B</span>&nbsp;&nbsp;Kimpton Theta New York &middot; 4&starf; &middot; review 8.2 &middot; $281<br>
+<br>
+GPT-5.4, GPT-5.4 Mini, GPT-4.1 Mini, Claude Haiku 4.5, and Gemma3 27B all take <span class="mono">A</span> (the cheaper 3&starf;) in both orderings. Gemma3 4B, DeepSeek-R1 7B, and Phi-4 Mini all take <span class="mono">B</span> (the pricier 4&starf;). None is wrong. They are different agents with different revealed preferences.
+</div>
+
+<p>PriceBench quantifies those preferences along three axes. <strong>Position engagement</strong> asks whether the model reads the content at all. <strong>Price response</strong> asks how strongly it weights dollars. <strong>Quality and brand</strong> ask what it pays for, and which names it likes. The result is a profile you can read off a scatter plot, a compact "personality" of a given model as a purchasing agent.</p>
+
+<!-- SECTION 2 -->
+<h2><span class="num">&sect;2</span> Related work</h2>
+
+<p>Conjoint-style preference recovery from LLMs has antecedents in intertemporal choice (Goli &amp; Singh, 2024) and broader experimental-economics replication (Horton et al., 2023; Ross, Kim &amp; Lo, 2024). PriceBench differs in scale (29 models rather than 2 to 5) and in carrying the analysis through to a per-model "personality" rather than a pass/fail. The position-locked behavior we document in &sect;4 also appears as "first-proposal bias" in two-sided agentic-market simulations (Bansal et al., 2025). We frame price sensitivity as a measurable <em>tendency</em> rather than a <em>capability</em>, in the spirit of the litmus tests proposed by Fish et al. (2025). Full citations are in the <a href="#references">References</a> section before the appendix.</p>
+
+<!-- SECTION 3 -->
+<h2><span class="num">&sect;3</span> The benchmark</h2>
+
+<p>We built PriceBench from 179 real New York City hotel profiles scraped across four OTAs (Booking.com, Expedia, KAYAK, TripAdvisor), spanning 1 to 5 stars, 36 neighborhoods, and $45 to $1,650 per night. Every hotel carries ten attributes. Six of them (price, room type, cancellation policy, breakfast, review score, review count) are re-randomized each time the hotel is shown. Fixed attributes (star rating, neighborhood, chain affiliation, amenities) vary <em>across</em> hotels but stay constant for a given property.</p>
+
+<p>Tasks are presented as Booking.com-style cards in two formats: 1,800 binary and 1,800 ternary choices. Each task is scored twice per model, once in the original position and once with options swapped, so any pure slot bias cancels in the pooled data. That gives <strong>3,600 binary and 3,600 ternary observations per model</strong>, 7,200 total. We run 29 models from 8 providers (OpenAI, Anthropic, Google, Meta, Alibaba, Microsoft, Mistral, DeepSeek) at temperature 0 with greedy decoding. For API models this means temperature=0, top_p=1. It is not strictly equivalent to Ollama's local greedy decoding, but deterministic enough that re-runs reproduce.<sup>1</sup></p>
+
+<p>Identification is clean. For binary tasks we use pair fixed effects so that all fixed hotel attributes drop out, and the price coefficient is identified purely from within-pair random variation in the six re-randomized attributes. Ternary tasks use triple fixed effects (one group per task-ordering pair) the same way. Both are standard conditional-logit estimators (McFadden 1974; Chamberlain 1980).</p>
+
+<p class="note"><sup>1</sup> Claude Haiku 4.5 was run only on the binary block in the initial sweep, so ternary results below omit it. Qwen3 1.7B failed to emit parseable choices and is excluded throughout.</p>
+
+<table class="compact">
+<thead><tr><th>Component</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Hotel pool</td><td>179 NYC profiles, $45 to $1,650, 36 neighborhoods</td></tr>
+<tr><td>Attributes per hotel</td><td>10 (4 fixed + 6 re-randomized per appearance)</td></tr>
+<tr><td>Binary tasks</td><td>450 unique pairs &times; 4 repetitions = 1,800</td></tr>
+<tr><td>Ternary tasks</td><td>300 unique triples &times; 6 repetitions = 1,800</td></tr>
+<tr><td>Counterbalancing</td><td>Every task scored in original + swapped order</td></tr>
+<tr><td>Observations per model</td><td>7,200 (binary + ternary, &times; 2 orderings)</td></tr>
+<tr><td>Models</td><td>29 across 8 providers, 0.6B to frontier</td></tr>
+<tr><td>Inference</td><td>Temperature 0, greedy, 16-token cap on answer</td></tr>
+</tbody>
+</table>
+
+<!-- SECTION 3 -->
+<h2><span class="num">&sect;4</span> Triage: does the model read the options at all?</h2>
+
+<p>Before asking about price or quality, we check something simpler: does the model engage with the content of the task, or does it always pick the first option? We compute the fraction of times each model selects the <em>first-shown</em> option, pooling across both orderings. A model that always takes the first slot will score near 100%. A model that always takes the last will score near 0%. A model that reads the options will sit somewhere in between.</p>
+
+<figure>
+  <img src="figures/fig_triage.png" alt="Bar chart of first-shown selection rate per model">
+  <figcaption><strong>Figure 1.</strong> First-shown selection rate (%), pooled across both orderings per task. Bars between 15% and 85% = engaged (colored by provider); outside that range = position-locked (grey). Five small models are locked so severely that no downstream analysis of their "preferences" is meaningful.</figcaption>
+</figure>
+
+<p>Five models are position-locked: Llama 3.2 1B (100%), Mistral 7B (99.5%), Qwen3 0.6B (98.5%), Llama 3 8B (88.2%), and Llama 3.1 8B (88.2%). At temperature 0 these models are effectively constants. They stamp A (or B) regardless of price, stars, review score, or brand. Any "preferences" you estimate from them are noise around a fixed decision. We label them upfront and exclude them from the rest of the story.</p>
+
+<p>The remaining <strong>23 engaged models</strong> span the full range of what is interesting. GPT-5.4 and Claude Haiku 4.5 sit very close to 50%. Qwen3 models cluster near 20%, leaning recency. Gemma3 and Llama 3.2 3B lean primacy at 60 to 65%. Mistral-Nemo 12B is the borderline case inside the band at 80.7% first-shown rate; we keep it but flag it, and its estimated preferences should be read as weaker evidence than, say, GPT-5.4's.</p>
+
+<!-- SECTION 4 -->
+<h2><span class="num">&sect;5</span> Price sensitivity among engaged models</h2>
+
+<p>For each engaged model we fit two parametric logits (log-price and linear-price) plus a non-parametric specification that replaces the price term with nine decile dummies (D1 omitted). The non-parametric version imposes no functional form. The parametric versions are for comparability.</p>
+
+<p>The log-price coefficients span more than an order of magnitude within the engaged group, from &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;7.02 (GPT-5.4) to &minus;0.40 (Qwen3 30B-A3B). Two models do not meaningfully respond to price. Gemma3 1B has a positive coefficient of +0.13 (p&nbsp;=&nbsp;0.09, wrong sign). Phi-2 2.7B has &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;0.07 on log-price (p&nbsp;=&nbsp;0.41), marginal on linear-price (p&nbsp;=&nbsp;0.04), with NP R&sup2;&nbsp;=&nbsp;0.01. Every other engaged model has a highly significant negative coefficient.</p>
+
+<figure>
+  <img src="figures/fig_decile_curves.png" alt="Non-parametric price response curves for 23 engaged models">
+  <figcaption><strong>Figure 2.</strong> Non-parametric price response curves for all 23 engaged models, shared y-axis so panels are directly comparable. Each point is the utility of a given price decile relative to the cheapest decile, recovered without imposing any functional form. Panels sorted by |&beta;<sub>ln(p)</sub>|, top-left = most price-sensitive. R&sup2; values are from the parametric log-price fit.</figcaption>
+</figure>
+
+<p>Three things stand out. First, the spread. GPT-5.4 penalizes a D10 hotel (~$900) by more than 15 utility units relative to a D1 hotel (~$120), while Qwen3 30B-A3B, one of the largest models in the engaged set, penalizes the same comparison by less than 1 utility unit. Second, the <em>shape</em> varies. Some curves are near-linear in log-dollar space (GPT-4.1 Mini, Gemma2 9B). Others bend convex (Claude Haiku, GPT-5.4 Mini). A few have a threshold where the model is indifferent up to about $200 then drops off (Llama 3.2 3B, Gemma3 4B, Phi-3 Mini).</p>
+
+<p>Third, and visible now that the panels share a y-axis, several models show an <strong>early positive bump</strong>. They weakly <em>prefer</em> a D2 or D3 price to the cheapest D1, before falling off at higher prices. GPT-5.4 Nano is the clearest example (+0.62 at D2). Gemma3 4B, Llama 3.2 3B, Phi-4 Mini, Phi-3 Mini, DeepSeek-R1 7B, and GPT-5.4 Mini all show milder versions. This is consistent with a price-as-quality-signal inference: the very cheapest hotels look suspicious, so the model discounts them. It is a real economic phenomenon, not a fitting artifact. Two models break the pattern entirely. <strong>Gemma3 1B and Phi-2 2.7B have genuinely flat or slightly positive curves across the full range</strong>, with R&sup2;&nbsp;&asymp;&nbsp;0.03 and 0.01 respectively. They are technically engaged (not position-locked) but their choices are not price-driven.</p>
+
+<h3>Binary vs ternary: does the story hold with three options?</h3>
+
+<p>Each of the 22 ternary-scored engaged models was also fit with a conditional logit grouped by task-ordering triple. We compare the binary and ternary point estimates per model on both the log-price and linear-price specifications.</p>
+
+<figure>
+  <img src="figures/fig_binary_vs_ternary.png" alt="Forest plot of binary vs ternary price coefficients per model, log and linear">
+  <figcaption><strong>Figure 2b.</strong> Log-price (left) and linear-price (right) coefficients per engaged model, binary (blue circle) vs ternary (orange square), with &plusmn;1 SE bars. Models are sorted on a shared y-axis by binary log-price coefficient from most negative (top) to least. Claude Haiku 4.5 has no ternary data, so only its binary point appears. Rank correlations between binary and ternary are strong in both specifications (&rho;&nbsp;=&nbsp;0.88 for log-price, &rho;&nbsp;=&nbsp;0.90 for linear-price).</figcaption>
+</figure>
+
+<p>The rank order is preserved in both specs, most strongly for the sharpest models at the top of the plot. The four frontier models (GPT-5.4, Gemma2 9B, GPT-4.1 Mini, GPT-5.4 Mini) occupy the same top rows in either spec under either format. Two things are worth calling out on <em>magnitude</em>. The sharpest models attenuate modestly under ternary (GPT-5.4 goes from &minus;7.02 to &minus;4.91 on log-price, about 30% shrinkage). Several Alibaba and DeepSeek models strengthen (Qwen3 30B-A3B jumps from &minus;0.40 to &minus;2.20). Whether ternary genuinely reveals more of these weaker models' preferences, or the comparison is simply harder to recover under three options, is an open question. Either way the qualitative personality-map story from the binary analysis survives the robustness check.</p>
+
+<h3>Does capability predict price sensitivity?</h3>
+
+<p>The obvious next question: do bigger, more capable models respond to price more sharply, or is this axis genuinely orthogonal to scale? Parameter count is the cleanest capability proxy for open-weight models. For proprietary models (the five GPTs and Claude Haiku 4.5) parameter counts are not public; we use rough tier-based estimates derived from API pricing ladders and treat their x-coordinates as ordinal, not exact.</p>
+
+<figure>
+  <img src="figures/fig_scaling.png" alt="Scatter of parameter count vs binary log-price sensitivity per engaged model">
+  <figcaption><strong>Figure 2d.</strong> Binary log-price sensitivity |&beta;<sub>ln(p)</sub>| against parameter count on a log x-axis, for engaged models with a significant price effect. Filled circles = open-weight (real parameter counts). Open squares = proprietary (tier-based size estimates). Thin lines connect same-family models in size order. Among open-weight models the correlation is positive and significant (Pearson r&nbsp;=&nbsp;0.62, Spearman &rho;&nbsp;=&nbsp;0.72, n&nbsp;=&nbsp;15, p&nbsp;=&nbsp;0.013).</figcaption>
+</figure>
+
+<p>Yes, bigger models tend to be more price-sensitive. Among the 15 open-weight models with a significant price effect, Pearson r between log-parameter-count and |&beta;<sub>ln(p)</sub>| is 0.62 (Spearman &rho; = 0.72, p = 0.013). Including the six proprietary models at their estimated sizes pushes r to 0.84, although that partly reflects the way we assigned those estimates. Log-parameter-count alone accounts for roughly a third of the cross-model variance in price sensitivity. The remaining two thirds come from architecture, training recipe, and alignment choices.</p>
+
+<p>Within-family patterns tell the rest of the story. <strong>Gemma3 scales monotonically</strong>: 1B &rarr; 4B &rarr; 12B &rarr; 27B produces a clean ladder in sensitivity. <strong>Phi scales monotonically within each generation</strong>: Phi-3 Mini &rarr; Phi-3 Medium and Phi-4 Mini &rarr; Phi-4 14B both step up sharply. <strong>OpenAI's Nano &rarr; Mini &rarr; Full ladders also scale monotonically</strong> within each generation. <strong>Qwen3 reverses</strong>: the 4B is more price-sensitive than the 8B, which is more price-sensitive than the 30B-A3B (Mixture-of-Experts with 3B active parameters). <strong>DeepSeek-R1 is almost flat</strong>: the 1.5B and 7B distilled variants have similar, weak price sensitivity.</p>
+
+<p>Two models stand out for their ratio of sensitivity to size. <strong>Gemma2 9B</strong> punches dramatically above its weight at &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;5.7, comparable to GPT-4.1 Mini and much sharper than other 7-to-12B models. <strong>Mistral-Nemo 12B</strong> punches below its weight at &minus;1.4, similar to 3B-4B open-weight models. The takeaway: parameter count is a useful prior but training recipe and family lineage swamp it. There is no universal "bigger model = more price-sensitive" law.</p>
+
+<h3>Log vs linear: does either functional form actually fit?</h3>
+
+<p>There is a long-running question in consumer theory about whether price perception is closer to logarithmic (Weber-Fechner: a doubling hurts the same everywhere) or linear (every extra dollar hurts the same). We compare both specifications per model using AIC, and overlay them on the non-parametric curve.</p>
+
+<figure>
+  <img src="figures/fig_funform.png" alt="Log and linear price fits overlaid on the non-parametric price response curves">
+  <figcaption><strong>Figure 2c.</strong> Log-price (purple) and linear-price (orange dashed) fits overlaid on the non-parametric decile points (black) with &plusmn;1 SE bands. The AIC-winning curve is drawn bold; the losing curve is drawn pale, so when the loser looks "way off" it is visibly the rejected alternative rather than a bug. Panel titles mark the winner; &Delta;AIC (linear &minus; log; negative = linear wins) is in the corner. Only the 21 engaged models with a genuine negative price response are included. Gemma3 1B (positive coef) and Phi-2 2.7B (flat curve, R&sup2;=0.01) are excluded because the log-vs-linear question is not well-posed for them.</figcaption>
+</figure>
+
+<p>Of the 21 models that actually respond to price, <strong>10 fit linear-price better, 10 fit log-price better, and one is a tie</strong> (Phi-4 Mini, &Delta;AIC&nbsp;=&nbsp;0). The split is not random. The sharpest price-sensitives (GPT-5.4 with &Delta;AIC&nbsp;=&nbsp;&minus;320, GPT-5.4 Mini at &minus;329, Gemma2 9B at &minus;187, GPT-4.1 Mini at &minus;157, Claude Haiku at &minus;147, Gemma3 27B at &minus;357, Phi-4 14B at &minus;158, GPT-5.4 Nano at &minus;104) all prefer the <em>linear</em> specification. Each added dollar hurts about the same whether you are starting at $100 or $800. The moderate price-sensitives cluster toward log (GPT-4.1 Nano, Phi-3 Medium, Qwen3 4B, Mistral-Nemo 12B, DeepSeek-R1 1.5B). We would want more models before calling this a law, but it is the one clean pattern in the functional-form comparison.</p>
+
+<p>One thing to flag when reading the figure. For some models the <em>losing</em> curve looks dramatically off. Qwen3 4B's linear fit, for example, predicts only &minus;1.5 at D10 when the non-parametric points reach &minus;3.2. That is not a bug. It is the visual signature of "log wins, and linear really does not fit": the linear slope is pinned down by the dense central mass of observations ($150 to $400), which underpredicts the steep fall-off at high prices for this model. Similarly for the linear-winning panels, the log curve overshoots at low prices and undershoots at high prices, because the true relationship in those models is closer to per-dollar than per-log-dollar.</p>
+
+<p>One last shape observation. For Qwen3 4B and Mistral-Nemo 12B the non-parametric curve has a distinct concave-then-flat pattern that <em>neither</em> parametric form captures well. Their price response saturates at moderate prices rather than continuing to fall through D10. Log wins the AIC comparison in both cases, but the best description of these models is "sharp fall-off then indifference past about $400."</p>
+
+<!-- SECTION 5 -->
+<h2><span class="num">&sect;6</span> Quality sensitivity: what are these models willing to pay for?</h2>
+
+<p>Price is only half the tradeoff. The other half is what each model weights when it <em>does</em> pay more. We read off the coefficients on the five re-randomized quality signals (review score, star rating, free cancellation, breakfast included, bed type) from the same logit that gives us the price coefficient.</p>
+
+<figure>
+  <img src="figures/fig_quality_heatmap.png" alt="Heatmap of quality coefficients per model">
+  <figcaption><strong>Figure 3.</strong> Quality coefficients for each engaged model (raw logit coefficients; cells shaded by within-attribute z-score across models). Rows are models sorted by price sensitivity (sharpest at top). Red = the model reads that signal strongly, blue = it barely responds. All entries control for price.</figcaption>
+</figure>
+
+<p>The signals the models actually use vary more than you would expect. GPT-5.4 Nano is an extreme review-score reader at &beta;&nbsp;=&nbsp;4.94, its largest coefficient by magnitude across all six regressors, and it loads on cancellation (2.70) and breakfast (2.61) as well. Claude Haiku 4.5 leans unusually heavily on the star rating itself (&beta;&nbsp;=&nbsp;1.50, the highest in the sample; next is Gemma3 27B at 1.18). Phi-4 14B reads cancellation policy heavily (2.35, second only to GPT-5.4 Nano's 2.70) while weighting review score at 2.64, within the sharp-price peer cluster but slightly below its mean of 3.25. The bed-type column is close to zero for most models, with GPT-4.1 Mini the exception at 0.45 (a king vs a single bed shifts log-odds noticeably).</p>
+
+<p>Below the midline the picture is different. Phi-2 2.7B and DeepSeek-R1 1.5B are the only engaged models that are genuinely <em>quality-indifferent</em> across the board; their coefficients on every signal round to near-zero. Qwen3 8B and Qwen3 30B-A3B are softer but not flat: they have a small positive review-score coefficient (0.58 and 0.82 respectively) and weak-but-visible cancellation and breakfast loadings. Those models are "engaged but muted" rather than "engaged but indifferent."</p>
+
+<p>A caveat on reading the heatmap across models. The raw coefficients are in logit units, and models with higher overall fit (higher pseudo-R&sup2;) tend to have larger absolute coefficients on <em>every</em> covariate. "Higher &beta;" partly reflects more decisive regressor coefficients in addition to genuine preference strength, so row-to-row comparisons are best read qualitatively.</p>
+
+<!-- SECTION 6 -->
+<h2><span class="num">&sect;7</span> The personality map</h2>
+
+<p>Plotting price sensitivity against quality sensitivity gives each engaged model a single point on a plane, the compact "personality" we would want to know before handing a user's booking decision to it.</p>
+
+<figure>
+  <img src="figures/fig_personality.png" alt="Scatter plot of price sensitivity vs quality sensitivity per engaged model">
+  <figcaption><strong>Figure 4.</strong> Personality map. X = |&beta;<sub>ln(p)</sub>| (higher = more price-averse holding quality fixed). Y = &beta;<sub>review_score</sub> (higher = more quality-driven holding price fixed). Colored by provider. Dashed lines at median split the plane into four regions. Only the 22 engaged models with a significant price coefficient in either the log-price or linear-price specification are shown; Gemma3 1B (the one engaged model whose price effect is not significant in either spec) is omitted.</figcaption>
+</figure>
+
+<p>The first thing to notice is how <em>lopsided</em> the plane is. Models that read price cleanly also read quality cleanly, and models that ignore one tend to ignore the other. Ten models land in the top-right (sharp on price and reads quality): GPT-5.4, GPT-4.1 Mini, GPT-5.4 Mini, Gemma3 27B, Claude Haiku 4.5, Phi-4 14B, GPT-5.4 Nano, GPT-4.1 Nano, Gemma3 12B, and Phi-3 Medium. Ten more land in the bottom-left (indifferent in both dimensions): the three Alibaba Qwen3 variants, both DeepSeek-R1s, Mistral-Nemo, Llama 3.2 3B, Gemma3 4B, Phi-3 Mini, and Phi-2 2.7B. <strong>Only two models break the diagonal.</strong> Gemma2 9B lives in the bottom-right (sharp on price but surprisingly muted on quality, &beta;<sub>review</sub>&nbsp;=&nbsp;1.57, below the median). Phi-4 Mini lives in the top-left (weak price response but strong quality, &beta;<sub>review</sub>&nbsp;=&nbsp;3.26 at only &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;0.76).</p>
+
+<p>The diagonal pattern has a practical reading. Picking an agent on PriceBench is not really a choice between "quality chaser" and "bargain hunter." It is mostly a choice between "coherent purchaser" and "weak preferences." The interesting heterogeneity is <em>within</em> the top-right. GPT-5.4 and Gemma2 9B are the two sharpest on price but weight review score least among the top-right group, while GPT-5.4 Nano is at the opposite corner of that cluster (moderate price, extreme review). If you are trying to pick a quality-chasing booking agent, GPT-5.4 Nano's personality is not just "a smaller GPT-5.4." It is a different agent.</p>
+
+<p>One detail worth flagging: within OpenAI's size ladder, bigger is not simply "more price-sensitive." GPT-5.4 Nano is the most review-driven of the five OpenAI models (highest &beta;<sub>review</sub>) but the <em>least</em> price-sensitive. GPT-5.4 Mini and GPT-5.4 are both sharper on price than GPT-5.4 Nano but weight review score less. The generation upgrade (4.1 to 5.4) mostly moves models along the <em>price</em> axis. The size upgrade (Nano, Mini, full) moves them along both.</p>
+
+<!-- SECTION 7 -->
+<h2><span class="num">&sect;8</span> Brand preferences, after controlling for everything else</h2>
+
+<p>Beyond price and the measured quality signals, do models have residual preferences over specific hotel brands? We re-estimate the logit with chain-family dummies (Hilton, Marriott, IHG, Hyatt, Wyndham; Independent is the reference) on top of the full control set (price deciles, stars, cancellation, breakfast, review score, room type). Anything left in the brand dummy is preference the controls cannot explain.</p>
+
+<figure>
+  <img src="figures/fig_brand_heatmap.png" alt="Heatmap of brand coefficients per engaged model">
+  <figcaption><strong>Figure 5.</strong> Brand coefficients (vs Independent) from a logit controlling for price deciles, stars, cancellation, breakfast, review score, and room type. Positive = the model prefers this chain over an Independent with identical controls. Rows sorted by total magnitude of brand response.</figcaption>
+</figure>
+
+<p>The most brand-affine models are at the bottom of the heatmap: GPT-5.4, Claude Haiku 4.5, GPT-5.4 Mini, Gemma3 27B, GPT-5.4 Nano, GPT-4.1 Mini. The standout pattern: after controlling for price and quality, <strong>several capable models over-weight Wyndham-mapped properties</strong> (GPT-5.4: +2.17, GPT-5.4 Mini: +1.70, Gemma3 27B: +1.15, GPT-4.1 Mini: +1.06). The Wyndham group in our pool is <em>5 hotels out of 179</em>: the Wyndham New Yorker, a Ramada, a Days Inn, a La Quinta, and a Best Western Plus. These are mostly 2 to 3-star properties in the $75 to $260 range, and the coefficient is identifying "after controlling for price and stars, these specific 5 properties are preferred." A single strong property in that set (for example, the Wyndham New Yorker's location near Penn Station) can drive a big coefficient. Read it as "capable models have a Wyndham-New-Yorker-shaped blind spot," not as a generic preference for the budget-brand category.</p>
+
+<p>Eleven of 23 engaged models have positive brand coefficients on all five chains, including GPT-5.4, both GPT-5.4 Mini and Nano, Gemma3 27B, Phi-4 14B, and Claude Haiku 4.5. What sets Claude apart is the <em>consistency</em>. Its minimum chain coefficient is +0.60 (IHG), the highest minimum in the sample, and its mean across the five chains is 0.71, also the highest. So while Claude is not unique in preferring branded properties over Independents, it is unique in loading roughly equally on Hilton, Marriott, IHG, Hyatt, and Wyndham rather than picking favorites.</p>
+
+<p>A caveat on the chain-family grouping. "Marriott" in our mapping covers Ritz-Carlton at $1,000+ and Fairfield Inn at $150 with the same dummy. A single coefficient is necessarily a weighted average of very different properties. A future version should disaggregate by sub-brand or use hotel fixed effects directly; with 179 properties and a few billion model-dollars this is feasible.</p>
+
+<p>We tested whether <em>same-provider</em> models have more correlated brand preferences than cross-provider pairs. The implicit hypothesis: brand biases might track training data. The answer: <strong>they do not.</strong> Mean pairwise correlation within the same provider is +0.079 (34 same-provider pairs, from OpenAI, Google, Microsoft, Alibaba, and DeepSeek; Anthropic, Meta, and Mistral each contribute only one engaged model and so no within-pair). Across providers the mean is +0.090 (219 pairs). Permutation test with 2,000 reshuffles of provider labels: p&nbsp;=&nbsp;0.48. This is a clean null result. With only one Claude in the sample we cannot say anything about whether Anthropic models <em>as a class</em> share brand biases; what we can say is that across the five providers where we have more than one engaged model, same-provider similarity is no greater than chance.</p>
+
+<!-- SECTION 8 -->
+<h2><span class="num">&sect;9</span> What this means if you are deploying one of these</h2>
+
+<p>Three practical takeaways, each tied to one of the sections above.</p>
+
+<p><strong>Position-locked models are directly exploitable.</strong> If you deploy Llama 3.2 1B or Mistral 7B as a booking agent at temperature 0, a platform that controls listing order controls 99%+ of your agent's bookings. No amount of prompt engineering fixes this at greedy decoding. The models are not making choices; they are emitting constants. Measure position bias before you measure anything else.</p>
+
+<p><strong>Model selection <em>is</em> a purchasing policy.</strong> Among engaged models with a significant price effect, |&beta;<sub>ln(p)</sub>| spans roughly 18x (from &minus;7.02 to &minus;0.40), and &beta;<sub>review</sub> spans about 80x (0.02 to 4.94, though see &sect;6's caveat that part of this is decisiveness, not pure preference). Swapping GPT-5.4 Nano for GPT-5.4 Mini in the same agent scaffold will shift your average booking price and your brand mix measurably. The personality map is the compact form of that tradeoff: pick a point on it deliberately, not by defaulting to whatever is cheapest on the API pricing page.</p>
+
+<p><strong>Brand bias is real but not tribal.</strong> Capable models have measurable brand preferences even after controlling for price, stars, and review score. Several of them over-weight specific Wyndham-mapped properties (dominated by one hotel in a tight set of five). One (Claude Haiku 4.5) is uniquely balanced across all five chain families. These biases are not shared across provider; each model has its own profile. If your use case cares about brand neutrality in agent recommendations, this is auditable and you should audit it.</p>
+
+<!-- ============================================================ -->
+<!-- REFERENCES                                                   -->
+<!-- ============================================================ -->
+
+<h2 id="references">References</h2>
+
+<ol class="references">
+
+<li>
+<cite>Bansal, G., et al. (2025). Magentic Marketplace: An open-source environment for studying agentic markets. arXiv:2510.25779.</cite>
+<div class="ref-note">Open-source two-sided LLM-agent marketplace; documents 60 to 100% first-proposal bias and consideration-set effects across frontier and small open-source models.</div>
+</li>
+
+<li>
+<cite>Chamberlain, G. (1980). Analysis of covariance with qualitative data. <em>The Review of Economic Studies</em>, 47(1), 225&ndash;238.</cite>
+<div class="ref-note">Develops the conditional-logit fixed-effects estimator that lets us condition on each task-ordering choice situation and identify preference parameters from within-group variation alone.</div>
+</li>
+
+<li>
+<cite>Fish, S., Shephard, J., Li, M., Shorrer, R. I., &amp; Gonczarowski, Y. A. (2025). EconEvals: Benchmarks and litmus tests for economic decision-making by LLM agents. ICML 2025 Workshop on Models of Human Feedback for AI Alignment. arXiv:2503.18825.</cite>
+<div class="ref-note">Distinguishes capability benchmarks from "litmus tests" that measure tendency along economic axes (efficiency vs. equality, patience vs. impatience, competitiveness vs. collusiveness).</div>
+</li>
+
+<li>
+<cite>Goli, A., &amp; Singh, A. (2024). Frontiers: Can large language models capture human preferences? <em>Marketing Science</em>, 43(4), 709&ndash;722. DOI:&nbsp;10.1287/mksc.2023.0306. arXiv:2305.02531.</cite>
+<div class="ref-note">Closest methodological precedent: binary intertemporal-choice tasks given to GPT-3.5 and GPT-4, with discount rates recovered by maximum likelihood. Finds GPT-3.5 lexicographic, GPT-4 more nuanced.</div>
+</li>
+
+<li>
+<cite>Horton, J. J., Filippas, A., &amp; Manning, B. (2023). Large language models as simulated economic agents: What can we learn from <em>Homo Silicus</em>? NBER Working Paper No. 31122. arXiv:2301.07543.</cite>
+<div class="ref-note">Foundational paper for treating LLMs as subjects in economic experiments. Replicates classic studies (price-gouging fairness, status-quo bias) and uses conditional logit on LLM choice data.</div>
+</li>
+
+<li>
+<cite>McFadden, D. (1974). Conditional logit analysis of qualitative choice behavior. In P. Zarembka (Ed.), <em>Frontiers in Econometrics</em> (pp.&nbsp;105&ndash;142). Academic Press.</cite>
+<div class="ref-note">Foundational paper introducing the conditional-logit estimator used throughout this analysis to recover preference coefficients from discrete-choice data.</div>
+</li>
+
+<li>
+<cite>Ross, J., Kim, Y., &amp; Lo, A. W. (2024). LLM Economicus? Mapping the behavioral biases of LLMs via utility theory. Conference on Language Modeling (COLM). arXiv:2408.02784.</cite>
+<div class="ref-note">Tests inequity aversion, loss aversion, and time discounting across many LLMs including small open-weight models. Introduces a "competence test" closely paralleling our position-engagement triage.</div>
+</li>
+
+</ol>
+
+<!-- ============================================================ -->
+<!-- APPENDIX                                                     -->
+<!-- ============================================================ -->
+
+<hr class="appendix-divider">
+
+<section class="appendix">
+
+<div class="eyebrow">Appendix &middot; technical details for replication</div>
+<h2 class="appendix-title">Replicating PriceBench</h2>
+<p class="appendix-dek">Everything needed to reproduce the figures on this page from scratch, score a new model on the existing tasks, or extend the design. Skip if you only care about the results.</p>
+
+<h3>A.1 Requirements</h3>
+
+<p>Python 3.10 or newer. The pinned analysis stack:</p>
+
+<table class="compact">
+<thead><tr><th>Package</th><th>Version</th><th>Used for</th></tr></thead>
+<tbody>
+<tr><td><span class="mono">numpy</span></td><td>1.26.4</td><td>numerics</td></tr>
+<tr><td><span class="mono">pandas</span></td><td>2.1.4</td><td>data wrangling</td></tr>
+<tr><td><span class="mono">statsmodels</span></td><td>0.14.5</td><td>conditional logit (<span class="mono">ConditionalLogit</span>)</td></tr>
+<tr><td><span class="mono">scipy</span></td><td>1.16.2</td><td>chi-square test, percentiles, permutation</td></tr>
+<tr><td><span class="mono">matplotlib</span></td><td>3.10.6</td><td>figures</td></tr>
+</tbody>
+</table>
+
+<p>For inference, additionally install <span class="mono">ollama</span> (local open-weight models), <span class="mono">openai</span> (OpenAI-compatible APIs), <span class="mono">anthropic</span> (Claude), and <span class="mono">tqdm</span>. <a href="https://ollama.com">Ollama</a> must be running on its default port before scoring open-weight models. API runs require <span class="mono">OPENAI_API_KEY</span> and <span class="mono">ANTHROPIC_API_KEY</span> in the environment.</p>
+
+<p><strong>Hardware.</strong> The largest open-weight models in the sweep (Gemma3 27B, Qwen3 30B-A3B Q4) need 24 to 32 GB of VRAM at typical Ollama quantizations; mid-size open-weight models (7-12B) fit comfortably on a single 16 GB card; sub-4B models run on CPU with patience. A complete original+swap sweep (7,200 prompts) takes roughly 1 to 3 hours per open-weight model on a modern desktop GPU. API runs are wall-clock-bound by rate limits, not compute.</p>
+
+<h3>A.2 Repository layout</h3>
+
+<table class="compact">
+<thead><tr><th>Path</th><th>Contents</th></tr></thead>
+<tbody>
+<tr><td><span class="mono">build_hotel_pool.py</span></td><td>Constructs <span class="mono">hotel_pool.json</span> from scraped OTA listings.</td></tr>
+<tr><td><span class="mono">hotel_pool.json</span></td><td>179 NYC hotel profiles. Fixed attributes (name, stars, neighborhood, chain, amenities) and parameters governing variable attributes (price range, room types, review base, cancellation/breakfast probabilities).</td></tr>
+<tr><td><span class="mono">generate_conjoint_tasks.py</span></td><td>Builds <span class="mono">conjoint_tasks.csv</span> (1,800 binary + 1,800 ternary). Seed 2026.</td></tr>
+<tr><td><span class="mono">conjoint_tasks.csv</span></td><td>3,600 tasks. Columns: <span class="mono">task_id</span>, <span class="mono">task_type</span>, <span class="mono">group_id</span>, then attribute blocks for options A, B, and (for ternary) C.</td></tr>
+<tr><td><span class="mono">run_conjoint_llm.py</span></td><td>Ollama scorer for open-weight models.</td></tr>
+<tr><td><span class="mono">run_conjoint_llm_api.py</span></td><td>OpenAI-compatible scorer (GPT-4.1, GPT-5.4, and any OpenAI-compat endpoint).</td></tr>
+<tr><td><span class="mono">run_conjoint_claude.py</span></td><td>Native Anthropic SDK scorer for Claude.</td></tr>
+<tr><td><span class="mono">conjoint_results_{tag}.csv</span><br><span class="mono">conjoint_results_{tag}_swap.csv</span></td><td>One pair per model. Columns: <span class="mono">task_id</span>, <span class="mono">choice</span> (A/B/C in the original-task frame), <span class="mono">raw_output</span>.</td></tr>
+<tr><td><span class="mono">config.py</span></td><td>Single source of truth: the <span class="mono">MODELS</span> registry mapping display names to result-CSV pairs, attribute encoding, area mapping, and shared dataset builders.</td></tr>
+<tr><td><span class="mono">analysis/</span></td><td>Estimation pipeline that emits the CSVs and figures used on this page.</td></tr>
+<tr><td><span class="mono">web/</span></td><td>This page (static HTML/CSS plus generated PNGs and CSVs).</td></tr>
+</tbody>
+</table>
+
+<h3>A.3 The hotel pool</h3>
+
+<p>The 179-hotel pool is constructed once and reused. Each hotel has fixed attributes that stay constant across appearances (id, name, stars, neighborhood, chain affiliation, amenities) and parameters that govern variable attributes (price range, room-type list, review-score and review-count baselines, cancellation and breakfast probabilities). The pool was built from real listings on Booking.com, Expedia, KAYAK, and TripAdvisor for September 2025 dates, then frozen. Chain affiliation is mapped from observed brand strings to one of {Hilton, Marriott, IHG, Hyatt, Wyndham, Independent}. <span class="mono">hotel_pool.json</span> is committed to the repo so re-scraping is not required for replication.</p>
+
+<h3>A.4 Task generation</h3>
+
+<p>Run <span class="mono">python generate_conjoint_tasks.py</span> to (re-)create <span class="mono">conjoint_tasks.csv</span>. The script samples 450 unique hotel pairs and presents each pair 4 times (1,800 binary tasks), and 300 unique triples each presented 6 times (1,800 ternary tasks). Each repetition draws fresh values for the six re-randomized attributes:</p>
+
+<ul>
+  <li><strong>Price.</strong> Uniform integer within the hotel's <span class="mono">[price_min, price_max]</span>.</li>
+  <li><strong>Room type.</strong> Uniform sample from the hotel's <span class="mono">room_types</span> list.</li>
+  <li><strong>Free cancellation.</strong> Bernoulli with hotel-specific probability.</li>
+  <li><strong>Breakfast included.</strong> Bernoulli with hotel-specific probability.</li>
+  <li><strong>Review score.</strong> Hotel base ± 0.2 (uniform).</li>
+  <li><strong>Review count.</strong> Hotel base ± 10% (uniform integer).</li>
+</ul>
+
+<p>Seed 2026 makes the file fully deterministic. Position counterbalancing is handled at scoring time, not in the task design: the same task file feeds both the original and swap runs.</p>
+
+<h3>A.5 Scoring a model</h3>
+
+<p>Inference settings are identical across all 29 models: temperature 0, top_p 1, top_k 1 (where exposed), max output 16 tokens, fixed RNG seed 42 where supported. No system prompt, no chain-of-thought instruction, no role play. The model is asked to emit a single letter; output is parsed leniently (exact match, then word-boundary match, then any-letter fallback) with up to 3 retries using a stricter "respond with ONLY the letter" reminder.</p>
+
+<p><strong>Open-weight models</strong> via Ollama:</p>
+
+<pre class="code-block">ollama pull gemma3
+python run_conjoint_llm.py --model gemma3:latest
+python run_conjoint_llm.py --model gemma3:latest --swap</pre>
+
+<p>Useful flags: <span class="mono">--task_type binary|ternary|all</span>, <span class="mono">--no_think</span> (suppress thinking traces for reasoning models), <span class="mono">--tag</span> (suffix for prompt variants), <span class="mono">--checkpoint_every</span>. Runs are resumable: re-running points the script at the partial CSV and only the unfinished task IDs are scored.</p>
+
+<p><strong>OpenAI and OpenAI-compatible APIs</strong>:</p>
+
+<pre class="code-block">python run_conjoint_llm_api.py --model gpt-5.4-mini --api_key $OPENAI_API_KEY
+python run_conjoint_llm_api.py --model gpt-5.4-mini --api_key $OPENAI_API_KEY --swap</pre>
+
+<p><strong>Claude</strong> (Anthropic SDK):</p>
+
+<pre class="code-block">python run_conjoint_claude.py --model claude-haiku-4-5
+python run_conjoint_claude.py --model claude-haiku-4-5 --swap</pre>
+
+<p>Each command produces <span class="mono">conjoint_results_{tag}.csv</span> (or <span class="mono">_swap.csv</span>) with 1,800 to 3,600 rows depending on <span class="mono">--task_type</span>. Swap runs are stored with <span class="mono">task_id + 10000</span> to avoid collision; the analysis scripts subtract the offset on load.</p>
+
+<h3>A.6 The prompt</h3>
+
+<p>The prompt is identical across every model. Reproduced verbatim for the binary case (the ternary version adds an Option C block with the same fields, and asks for "A, B, or C"):</p>
+
+<div class="callout prompt-block">
+<pre>You are booking a hotel room in New York City for a one-night stay. You must choose between the following two options.
+
+Option A:
+  Hotel: {a_name}
+  Star rating: {a_stars} stars
+  Neighborhood: {a_neighborhood}
+  Guest review score: {a_review_score}/10 ({a_review_count:,} reviews)
+  Room type: {a_room_type}
+  Free cancellation: {a_cancellation_free}
+  Breakfast included: {a_breakfast_included}
+  Key amenities: {a_amenities}
+  Price per night: ${a_price:,}
+
+Option B:
+  [same fields]
+
+Which option do you choose? Reply with only the letter A or B.</pre>
+</div>
+
+<h3>A.7 Adding a new model</h3>
+
+<ol>
+  <li>Score the model twice (original + swap) using whichever runner fits its API.</li>
+  <li>Add one entry to the <span class="mono">MODELS</span> dict in <span class="mono">config.py</span> mapping a display name to the (original, swap) CSV pair.</li>
+  <li>Re-run the analysis pipeline. All scripts iterate over <span class="mono">MODELS</span>, so plot layouts and tables update automatically.</li>
+</ol>
+
+<h3>A.8 Estimation pipeline</h3>
+
+<p>From the project root, run in this order. Each script writes to <span class="mono">web/data/</span> and (for the last) <span class="mono">web/figures/</span>.</p>
+
+<table class="compact">
+<thead><tr><th>Script</th><th>Produces</th></tr></thead>
+<tbody>
+<tr><td><span class="mono">analysis/triage.py</span></td><td>First-option rate per model and engaged/locked verdict (Figure 1).</td></tr>
+<tr><td><span class="mono">analysis/pooled.py</span></td><td>Per-model pooled binary+ternary conditional logit (parametric and non-parametric); LR test on pooling validity.</td></tr>
+<tr><td><span class="mono">analysis/ternary.py</span></td><td>Ternary-only conditional logit for the binary-vs-ternary forest plot (Figure 2b).</td></tr>
+<tr><td><span class="mono">analysis/personality.py</span></td><td>Quality coefficients (review score, stars, cancellation, breakfast, bed type) and capability-scatter inputs (Figures 3, 4, 2d).</td></tr>
+<tr><td><span class="mono">analysis/brand.py</span></td><td>Chain-family coefficients with the full control set; permutation test on within-provider correlation (Figure 5).</td></tr>
+<tr><td><span class="mono">analysis/figures.py</span></td><td>Renders all eight PNGs from the CSV outputs above.</td></tr>
+</tbody>
+</table>
+
+<p>The estimator is conditional logit (<span class="mono">statsmodels.discrete.conditional_models.ConditionalLogit</span>) with task-ordering fixed effects: pair fixed effects for binary, triple fixed effects for ternary, and one group per task-ordering choice situation regardless of size for the pooled spec. Standard errors are the default model-based (Fisher information) variance, not clustered. Decile cut-points are computed from the pooled price distribution across all options in the relevant task type and re-used across models so the x-axes in Figure 2 are directly comparable.</p>
+
+<h3>A.9 End-to-end reproduction</h3>
+
+<pre class="code-block">pip install -r requirements.txt
+
+# Tasks (skip if conjoint_tasks.csv is committed; it usually is)
+python generate_conjoint_tasks.py
+
+# Score every model in config.MODELS:
+#   - open-weight models via Ollama (run_conjoint_llm.py)
+#   - OpenAI / compat models via run_conjoint_llm_api.py
+#   - Claude via run_conjoint_claude.py
+# Each model needs both an original and a --swap run. This is the
+# expensive step; budget hours per local model, minutes per API model.
+
+# Estimation and figures
+python analysis/triage.py
+python analysis/pooled.py
+python analysis/ternary.py
+python analysis/personality.py
+python analysis/brand.py
+python analysis/figures.py</pre>
+
+<p>The page itself (<span class="mono">web/index.html</span>) is hand-written and references the figures by relative path; there is no build step.</p>
+
+<h3>A.10 Caveats and known limitations</h3>
+
+<ul>
+  <li><strong>Determinism is approximate for API models.</strong> OpenAI and Anthropic do not guarantee bit-exact reproducibility at temperature 0; small variations between re-runs are expected and well below the level that affects regression results.</li>
+  <li><strong>Quantization is heterogeneous.</strong> Qwen3 30B-A3B uses Q4_K_M; Llama 3 8B and Mistral 7B use FP16; smaller open-weight models use Ollama's defaults. We make no attempt to compare quantization levels here.</li>
+  <li><strong>Chain mapping is coarse.</strong> "Marriott" lumps Ritz-Carlton with Fairfield Inn under one dummy. Sub-brand or property-level fixed effects are a sensible next step and are feasible at this sample size.</li>
+  <li><strong>Hotel pool is frozen.</strong> Adding hotels would require re-scoring every model. The 179-hotel pool was finalized before scoring began.</li>
+  <li><strong>One prompt template.</strong> All results are conditional on the neutral booking prompt above. Persona instructions, system prompts, and tool-use scaffolds are out of scope for v1.</li>
+  <li><strong>Qwen3 1.7B is excluded</strong> after the retry loop still failed to produce parseable output on a non-trivial fraction of tasks. Five additional models (Llama 3.2 1B, Mistral 7B, Qwen3 0.6B, Llama 3 8B, Llama 3.1 8B) emit valid letters but are flagged position-locked and excluded from interpretive analysis (see &sect;4).</li>
+  <li><strong>Claude Haiku 4.5 was scored on binary only</strong> in the initial sweep; ternary plots and the LR pooling test omit it.</li>
+</ul>
+
+<h3>A.11 License</h3>
+
+<p>Code is released under the MIT license (see <span class="mono">LICENSE</span>). The hotel-pool JSON encodes parameter ranges and chain affiliations derived from publicly accessible OTA listings; it is not a redistribution of review-level data. Exact code revisions are pinned by Git commit hash.</p>
+
+</section>
+
+<hr>
+
+<footer>
+<p><strong>PriceBench v1.</strong> 29 models &middot; 8 providers &middot; 1,800 binary + 1,800 ternary tasks &middot; 179 NYC hotel profiles &middot; neutral prompt. All code, tasks, and model responses are in the repo. The hotel pool was constructed from real listings across Booking.com, Expedia, KAYAK, and TripAdvisor.</p>
+<p>Open questions we would like to close before claiming more: prompt sensitivity (neutral vs budget vs luxury persona), extension beyond hotels, adding the remaining frontier models (Gemini, Grok, Mistral Large, Claude Sonnet/Opus), and temperature &gt; 0 for mixed-logit fits.</p>
+</footer>
+
+</main>
+</body>
+</html>

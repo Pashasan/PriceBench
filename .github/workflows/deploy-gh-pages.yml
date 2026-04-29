@@ -1,0 +1,51 @@
+name: Deploy web/ to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', '.github/workflows/deploy-gh-pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-gh-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Stage web/ contents
+        run: |
+          mkdir -p /tmp/site
+          cp -r web/. /tmp/site/
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-checkout
+
+      - name: Sync site to gh-pages
+        run: |
+          cd gh-pages-checkout
+          # Remove tracked files (keep .git and any hidden config)
+          git ls-files -z | xargs -0 rm -f
+          cp -r /tmp/site/. .
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to deploy."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Deploy web/ from ${GITHUB_SHA::7}"
+          git push origin gh-pages

@@ -97,6 +97,12 @@ p.dek {
   font-style: italic;
 }
 
+p.source-link {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 13px;
+  margin: -8px 0 18px;
+}
+
 ul, ol { padding-left: 24px; margin: 0 0 18px; }
 li { margin-bottom: 6px; }
 

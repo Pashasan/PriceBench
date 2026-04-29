@@ -43,7 +43,7 @@ PROVIDER_COLORS = {
 
 triage = pd.read_csv(os.path.join(DATA, 'triage.csv'))
 personality = pd.read_csv(os.path.join(DATA, 'personality.csv'))
-deciles = pd.read_csv(os.path.join(BASE, 'nonparametric_decile_coefficients.csv'))
+deciles = pd.read_csv(os.path.join(DATA, 'decile_pooled.csv'))
 brands = pd.read_csv(os.path.join(DATA, 'brand_matrix.csv'), index_col=0)
 
 engaged = triage[triage['verdict'] == 'engaged']['model'].tolist()
@@ -507,7 +507,7 @@ def fig_binary_vs_ternary():
     ax_log.set_title(
         f'Log-price   (Spearman ρ = {rho_log:.2f}, Pearson r = {r_log:.2f})',
         fontsize=10.5, loc='left', pad=8)
-    ax_log.legend(loc='lower right', frameon=False, fontsize=9)
+    ax_log.legend(loc='lower left', frameon=False, fontsize=9)
 
     # --- Linear panel ---
     for i, row in m.iterrows():
@@ -677,7 +677,7 @@ def fig_scaling():
     # crowded bottom-left get bespoke positions to avoid overlap.
     DEFAULT_OFFSET = (8, 5)
     LABEL_OFFSET = {
-        'DeepSeek-R1 1.5B': (-8, -14),   # left, below
+        'DeepSeek-R1 1.5B': (8, 8),      # right, above (point at x-axis edge)
         'Llama3.2 3B':      (8, -13),    # right, below
         'Qwen3 30B-A3B':    (8, -14),    # right, below
         'Phi-3 Mini':       (-8, -12),   # left, below
@@ -695,7 +695,7 @@ def fig_scaling():
     }
     HALIGN = {  # horizontal alignment override when nudging left
         'Qwen3 4B': 'right', 'Gemma3 4B': 'right', 'Mistral-Nemo 12B': 'right',
-        'DeepSeek-R1 1.5B': 'right', 'Phi-3 Mini': 'right',
+        'Phi-3 Mini': 'right',
         'GPT-4.1 Nano': 'right',
     }
     for _, r in e.iterrows():

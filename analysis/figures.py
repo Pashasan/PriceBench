@@ -288,6 +288,9 @@ def fig_personality():
     ax.text(0.005, 0.01, 'indifferent / weak price signal',
             ha='left', va='bottom', fontsize=10, color='#aaa',
             fontstyle='italic', transform=ax.transAxes)
+    ax.text(0.995, 0.01, 'sharp on price + lets quality slide',
+            ha='right', va='bottom', fontsize=10, color='#aaa',
+            fontstyle='italic', transform=ax.transAxes)
 
     # Provider legend — place OUTSIDE data area (to the right) so it never
     # overlaps points.

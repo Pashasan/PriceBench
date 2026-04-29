@@ -97,7 +97,7 @@ GPT-5.4, GPT-5.4 Mini, GPT-4.1 Mini, Claude Haiku 4.5, and Gemma3 27B all take <
 <!-- SECTION 4 -->
 <h2><span class="num">&sect;5</span> Price sensitivity among engaged models</h2>
 
-<p>For each engaged model we fit two parametric logits (log-price and linear-price) plus a non-parametric specification that replaces the price term with nine decile dummies (D1 omitted). The non-parametric version imposes no functional form. The parametric versions are for comparability.</p>
+<p>For each engaged model we fit two parametric logits (log-price and linear-price) plus a non-parametric specification that replaces the price term with nine decile dummies. Prices are sorted into ten equal-population bins, with D1 the cheapest decile (about $45 to $120) and D10 the most expensive (about $700 to $1,650). D1 is the reference category, so each coefficient on D2 through D10 reads directly as the utility of a hotel in that price band relative to a D1 hotel. The non-parametric version imposes no functional form; the parametric versions are for comparability.</p>
 
 <p>The log-price coefficients span more than an order of magnitude within the engaged group, from &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;7.02 (GPT-5.4) to &minus;0.40 (Qwen3 30B-A3B). Two models do not meaningfully respond to price. Gemma3 1B has a positive coefficient of +0.13 (p&nbsp;=&nbsp;0.09, wrong sign). Phi-2 2.7B has &beta;<sub>ln(p)</sub>&nbsp;=&nbsp;&minus;0.07 on log-price (p&nbsp;=&nbsp;0.41), marginal on linear-price (p&nbsp;=&nbsp;0.04), with NP R&sup2;&nbsp;=&nbsp;0.01. Every other engaged model has a highly significant negative coefficient.</p>
 
